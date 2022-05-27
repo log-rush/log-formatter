@@ -17,45 +17,45 @@ export const TextWeightEffect = {
     [EFFECTS.Bold]: 2,
     [EFFECTS.Faint]: 3,
     Default: 1,
-}
+} as const
 
 export const ItalicEffect = {
     [EFFECTS.Italic]: true,
     [EFFECTS.NotItalic]: false,
     Default: false,
-}
+} as const
 
 export const UnderlineEffect = {
     [EFFECTS.NotUnderlined]: 1,
     [EFFECTS.Underline]: 2,
     [EFFECTS.DoublyUnderlined]: 3,
     Default: 1,
-}
+} as const
 
 export const NegativeEffect = {
     [EFFECTS.NegativeImage]: true,
     [EFFECTS.PositiveImage]: false,
     Default: false,
-}
+} as const
 
 export const ConcealedEffect = {
     [EFFECTS.ConcealedCharacters]: true,
     [EFFECTS.RevealedCharacters]: false,
     Default: false,
-}
+} as const
 
 export const CrossedOutEffect = {
     [EFFECTS.CrossedOut]: true,
     [EFFECTS.NotCrossedOut]: false,
     Default: false,
-}
+} as const
 
 export const BlinkEffect = {
     [EFFECTS.Steady]: 1,
     [EFFECTS.BlinkSlow]: 2,
     [EFFECTS.BlinkRapid]: 3,
     Default: 1,
-}
+} as const
 
 export const ColorEffect = {
     [EFFECTS.ColorDefault]: 1,
@@ -72,14 +72,14 @@ export const ColorEffect = {
     [EFFECTS.ColorMode256]: '',
     [EFFECTS.ColorModeRGB]: '',
     Default: 1,
-}
+} as const
 
 export const ColorModeEffect = {
     [EFFECTS.ColorMode8]: 1,
     [EFFECTS.ColorMode256]: 2,
     [EFFECTS.ColorModeRGB]: 3,
     Default: 1,
-}
+} as const
 
 export const EffectsMap: {
     [K in keyof SGREffect]: DefaultAble<SGREffect[K]>
@@ -94,7 +94,7 @@ export const EffectsMap: {
     blink: BlinkEffect,
     crossedOut: CrossedOutEffect,
     concealed: ConcealedEffect,
-}
+} as const
 
 export type SGREffect = {
     // font: '' not supported

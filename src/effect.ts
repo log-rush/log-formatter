@@ -4,7 +4,7 @@ export const PRECEDENCE = {
     Low: 1,
     Medium: 2,
     High: 3,
-}
+} as const
 
 export const EFFECTS = {
     Reset: '0',
@@ -66,7 +66,7 @@ export const EFFECTS = {
     ColorMode256: '8;5;', // 38 / 48 / ...
     ColorModeRGB: '8;2;',
     ChainCommand: ';',
-}
+} as const
 
 export const TOKENS: Token[] = [
     ...[
