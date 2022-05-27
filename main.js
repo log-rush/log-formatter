@@ -1,4 +1,4 @@
-import { main } from './src/index';
+import { main } from './dist/index';
 
 const clear = () => {
     document.body.innerHTML = '';
