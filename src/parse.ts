@@ -20,24 +20,29 @@ export class Parser {
         while (pointer < data.length) {
             const char = data[pointer]
             for (const CtrlChar of CTRL_CHARS) {
-                if (char === CtrlChar) {
+                if (
+                    CtrlChar.length === 1
+                        ? char === CtrlChar
+                        : CtrlChar ===
+                          data.slice(pointer, pointer + CtrlChar.length)
+                ) {
                     // begin sequence
                     startedSQRCommand = true
-                    startIndex = undefined
+                    pointer += CtrlChar.length
+                    startIndex = pointer
                     endIndex = undefined
                     continue
                 }
             }
             if (startedSQRCommand) {
-                if (startIndex === undefined && char === OPEN_BYTE) {
-                    startIndex = pointer
-                } else if (
+                if (
+                    // end byte of sequence
                     startIndex &&
                     endIndex === undefined &&
                     char === CLOSE_BYTE
                 ) {
                     endIndex = pointer
-                    this.parseSGRCommand(data.slice(startIndex, endIndex))
+                    this.parseSGRCommand(data.slice(startIndex + 1, endIndex))
                     startIndex = undefined
                     endIndex = undefined
                     startedSQRCommand = false
