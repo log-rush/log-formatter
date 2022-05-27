@@ -38,12 +38,14 @@ export class CLIColorASTNode {
         node.nextNode = this
         node.previousNode = this.previousNode
         this.previousNode = node
+        return node
     }
 
     insertAfter(node: CLIColorASTNode) {
         node.previousNode = this
         node.nextNode = this.nextNode
         this.nextNode = node
+        return node
     }
 
     clone(): CLIColorASTNode {
