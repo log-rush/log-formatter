@@ -31,14 +31,19 @@ export class Parser {
             if (startedSQRCommand) {
                 if (startIndex === undefined && char === OPEN_BYTE) {
                     startIndex = pointer
-                    continue
-                }
-                if (endIndex === undefined && char === CLOSE_BYTE) {
+                } else if (
+                    startIndex &&
+                    endIndex === undefined &&
+                    char === CLOSE_BYTE
+                ) {
                     endIndex = pointer
                     this.parseSGRCommand(data.slice(startIndex, endIndex))
-                    continue
+                    startIndex = undefined
+                    endIndex = undefined
+                    startedSQRCommand = false
                 }
             }
+            pointer++
         }
     }
 
