@@ -68,6 +68,16 @@ export const ColorEffect = {
     [EFFECTS.ColorCyan]: 8,
     [EFFECTS.ColorWhite]: 9,
     [EFFECTS.NormalColorAndWeight]: 1,
+    CUSTOM: '',
+    [EFFECTS.ColorMode256]: '',
+    [EFFECTS.ColorModeRGB]: '',
+    Default: 1,
+}
+
+export const ColorModeEffect = {
+    [EFFECTS.ColorMode8]: 1,
+    [EFFECTS.ColorMode256]: 2,
+    [EFFECTS.ColorModeRGB]: 3,
     Default: 1,
 }
 
@@ -77,7 +87,9 @@ export const EffectsMap: {
     weight: TextWeightEffect,
     italic: ItalicEffect,
     underline: UnderlineEffect,
+    foregroundMode: ColorModeEffect,
     foreground: ColorEffect,
+    backgroundMode: ColorModeEffect,
     background: ColorEffect,
     blink: BlinkEffect,
     crossedOut: CrossedOutEffect,
@@ -89,7 +101,9 @@ export type SGREffect = {
     weight: PropertyOf<typeof TextWeightEffect>
     italic: PropertyOf<typeof ItalicEffect>
     underline: PropertyOf<typeof UnderlineEffect>
+    foregroundMode: PropertyOf<typeof ColorModeEffect>
     foreground: PropertyOf<typeof ColorEffect>
+    backgroundMode: PropertyOf<typeof ColorModeEffect>
     background: PropertyOf<typeof ColorEffect>
     blink: PropertyOf<typeof BlinkEffect>
     crossedOut: PropertyOf<typeof CrossedOutEffect>
