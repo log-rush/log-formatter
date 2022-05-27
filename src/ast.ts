@@ -7,6 +7,14 @@ export class CLIColorASTNode {
         this.effect = effect
     }
 
+    set<K extends keyof SGREffect>(
+        key: K,
+        value: SGREffect[K],
+    ): CLIColorASTNode {
+        this.effect[key] = value
+        return this.clone()
+    }
+
     clone(): CLIColorASTNode {
         return new CLIColorASTNode({
             weight: this.effect.weight,

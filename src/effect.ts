@@ -120,6 +120,6 @@ export const PARTIAL_TOKENS: string[] = [
     // second level
     EFFECTS.ColorMode8,
     EFFECTS.ColorMode256,
-]
+].reverse()
 
 // \033[38;2;255;0;0;48;2;0;255;0m
