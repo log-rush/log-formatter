@@ -1,8 +1,9 @@
+import { Token } from './types'
 
 export const PRECEDENCE = {
     Low: 1,
     Medium: 2,
-    High: 3
+    High: 3,
 }
 
 export const EFFECTS = {
@@ -65,9 +66,9 @@ export const EFFECTS = {
     ColorMode256: '8;5;', // 38 / 48 / ...
     ColorModeRGB: '8;2;',
     ChainCommand: ';',
-};
+}
 
-export const TOKENS = [
+export const TOKENS: Token[] = [
     ...[
         EFFECTS.ColorMode8,
         EFFECTS.Black,
@@ -78,7 +79,7 @@ export const TOKENS = [
         EFFECTS.Magenta,
         EFFECTS.Cyan,
         EFFECTS.White,
-    ].map(token => ({ token, precedence: PRECEDENCE.Low })),
+    ].map((token) => ({ token, precedence: PRECEDENCE.Low })),
     ...[
         EFFECTS.ChainCommand,
         EFFECTS.Bold,
@@ -87,7 +88,7 @@ export const TOKENS = [
         EFFECTS.Underline,
         EFFECTS.BlinkSlow,
         EFFECTS.BlinkRapid,
-    ].map(token => ({ token, precedence: PRECEDENCE.Medium })),
+    ].map((token) => ({ token, precedence: PRECEDENCE.Medium })),
     ...[
         EFFECTS.Reset,
         EFFECTS.ColorMode8,
@@ -96,7 +97,7 @@ export const TOKENS = [
         EFFECTS.Background,
         EFFECTS.BrightForeground,
         EFFECTS.BrightBackground,
-    ].map(token => ({ token, precedence: PRECEDENCE.High }))
+    ].map((token) => ({ token, precedence: PRECEDENCE.High })),
 ]
 
 // \033[38;2;255;0;0;48;2;0;255;0m
