@@ -81,6 +81,12 @@ export const ColorModeEffect = {
     Default: 1,
 } as const
 
+export const InvertedEffect = {
+    [EFFECTS.PositiveImage]: 1,
+    [EFFECTS.NegativeImage]: 2,
+    Default: 1,
+} as const
+
 export const EffectsMap: {
     [K in keyof SGREffect]: DefaultAble<SGREffect[K]>
 } = {
@@ -92,6 +98,7 @@ export const EffectsMap: {
     backgroundMode: ColorModeEffect,
     background: ColorEffect,
     blink: BlinkEffect,
+    inverted: InvertedEffect,
     crossedOut: CrossedOutEffect,
     concealed: ConcealedEffect,
 } as const
@@ -106,6 +113,7 @@ export type SGREffect = {
     backgroundMode: PropertyOf<typeof ColorModeEffect>
     background: PropertyOf<typeof ColorEffect>
     blink: PropertyOf<typeof BlinkEffect>
+    inverted: PropertyOf<typeof InvertedEffect>
     crossedOut: PropertyOf<typeof CrossedOutEffect>
     concealed: PropertyOf<typeof ConcealedEffect>
 }
