@@ -1,4 +1,4 @@
-import { CLIColorASTNode } from '../ast'
+import { SGRAstNode } from '../ast'
 import { EffectKey } from '../effect'
 import { BlinkEffect } from '../types'
 import { createSGREffects } from './testUtil'
@@ -6,16 +6,16 @@ import { createSGREffects } from './testUtil'
 describe('AST Node Test', () => {
     it('should initialize with arguments', () => {
         const effects = createSGREffects()
-        const node = new CLIColorASTNode(effects, 'abc')
+        const node = new SGRAstNode(effects, 'abc')
 
         expect(node.effect).toEqual(effects)
         expect(node.content).toEqual('abc')
     })
 
     it('should insert node after', () => {
-        const a = new CLIColorASTNode(createSGREffects(), 'a')
-        const b = new CLIColorASTNode(createSGREffects(), 'b')
-        const c = new CLIColorASTNode(createSGREffects(), 'c')
+        const a = new SGRAstNode(createSGREffects(), 'a')
+        const b = new SGRAstNode(createSGREffects(), 'b')
+        const c = new SGRAstNode(createSGREffects(), 'c')
 
         expect(a.nextNode).toBeUndefined()
         a.insertAfter(b)
@@ -29,16 +29,16 @@ describe('AST Node Test', () => {
         expect(c.previousNode).toBe(b)
         expect(a.nextNode?.nextNode).toBe(c)
 
-        const a1 = new CLIColorASTNode(createSGREffects(), 'a1')
+        const a1 = new SGRAstNode(createSGREffects(), 'a1')
         a.insertAfter(a1)
         expect(a1.previousNode).toBe(a)
         expect(a1.nextNode).toBe(b)
     })
 
     it('should insert node before', () => {
-        const a = new CLIColorASTNode(createSGREffects(), 'a')
-        const b = new CLIColorASTNode(createSGREffects(), 'b')
-        const c = new CLIColorASTNode(createSGREffects(), 'c')
+        const a = new SGRAstNode(createSGREffects(), 'a')
+        const b = new SGRAstNode(createSGREffects(), 'b')
+        const c = new SGRAstNode(createSGREffects(), 'c')
 
         expect(a.nextNode).toBeUndefined()
         a.insertBefore(b)
@@ -52,14 +52,14 @@ describe('AST Node Test', () => {
         expect(c.nextNode).toBe(b)
         expect(a.previousNode?.previousNode).toBe(c)
 
-        const a1 = new CLIColorASTNode(createSGREffects(), 'a1')
+        const a1 = new SGRAstNode(createSGREffects(), 'a1')
         a.insertBefore(a1)
         expect(a1.nextNode).toBe(a)
         expect(a1.previousNode).toBe(b)
     })
 
     it('should clone deep', () => {
-        const a = new CLIColorASTNode(createSGREffects(), 'a')
+        const a = new SGRAstNode(createSGREffects(), 'a')
         const b = a.clone()
 
         a.setEffect('blink', BlinkEffect[EffectKey.BlinkRapid])

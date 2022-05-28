@@ -1,5 +1,5 @@
 import { Color256, Color8, EffectKey, EFFECTS } from './effect'
-import { CLIColorASTNode } from './ast'
+import { SGRAstNode } from './ast'
 import {
     BlinkEffect,
     ColorEffect,

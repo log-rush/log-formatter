@@ -1,11 +1,9 @@
-import { CLIColorASTNode } from '../ast'
+import { SGRAstNode } from '../ast'
 import { EffectKey } from '../effect'
 import { Parser } from '../parse'
 import { ColorModeEffect, TextWeightEffect } from '../types'
 
-const expectNode = (
-    node: CLIColorASTNode | undefined,
-): node is CLIColorASTNode => {
+const expectNode = (node: SGRAstNode | undefined): node is SGRAstNode => {
     expect(node).toBeDefined()
     return node !== undefined
 }

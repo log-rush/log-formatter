@@ -1,4 +1,4 @@
-import { CLIColorASTNode } from './ast'
+import { SGRAstNode } from './ast'
 import { CommandParserMap } from './commands'
 import { EffectKey, EFFECTS, TOKENS } from './effect'
 import { DefaultSGREffects, SGREffect } from './types'
@@ -16,13 +16,13 @@ export const OPEN_BYTE = '['
 export const CLOSE_BYTE = 'm'
 
 export class Parser {
-    parse(data: string): CLIColorASTNode {
+    parse(data: string): SGRAstNode {
         let pointer = 0
         let startedSQRCommand = false
         let startIndex = undefined
         let endIndex = undefined
         let contentStart = 0
-        let ASTRoot = CLIColorASTNode.Default()
+        let ASTRoot = SGRAstNode.Default()
         let ASTHead = ASTRoot
 
         while (pointer < data.length) {
@@ -70,7 +70,7 @@ export class Parser {
         }
 
         if (pointer > contentStart) {
-            const finalNode = CLIColorASTNode.Default()
+            const finalNode = SGRAstNode.Default()
             finalNode.setContent(data.substring(contentStart, pointer))
             ASTHead.insertAfter(finalNode)
             ASTHead = finalNode
@@ -79,8 +79,8 @@ export class Parser {
         return ASTRoot
     }
 
-    parseSGRCommand(data: string): CLIColorASTNode | undefined {
-        const node = new CLIColorASTNode(DefaultSGREffects, '')
+    parseSGRCommand(data: string): SGRAstNode | undefined {
+        const node = new SGRAstNode(DefaultSGREffects, '')
         let command = data
 
         while (command.length > 0) {

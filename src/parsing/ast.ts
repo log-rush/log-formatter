@@ -1,19 +1,19 @@
 import { DefaultSGREffects, EffectsMap, SGREffect } from './types'
 
-export class CLIColorASTNode {
+export class SGRAstNode {
     readonly effect: SGREffect
 
     public content: string
 
-    public nextNode: CLIColorASTNode | undefined
+    public nextNode: SGRAstNode | undefined
 
-    public previousNode: CLIColorASTNode | undefined
+    public previousNode: SGRAstNode | undefined
 
     constructor(
         effect: SGREffect,
         content: string,
-        next?: CLIColorASTNode,
-        previous?: CLIColorASTNode,
+        next?: SGRAstNode,
+        previous?: SGRAstNode,
     ) {
         this.effect = { ...effect }
         this.content = content
@@ -24,37 +24,37 @@ export class CLIColorASTNode {
     setEffect<K extends keyof SGREffect>(
         key: K,
         value: SGREffect[K],
-    ): CLIColorASTNode {
+    ): SGRAstNode {
         this.effect[key] = value
         return this.clone()
     }
 
-    setContent(value: string): CLIColorASTNode {
+    setContent(value: string): SGRAstNode {
         this.content = value
         return this.clone()
     }
 
-    appendContent(value: string): CLIColorASTNode {
+    appendContent(value: string): SGRAstNode {
         this.content += value
         return this.clone()
     }
 
-    insertBefore(node: CLIColorASTNode) {
+    insertBefore(node: SGRAstNode) {
         node.nextNode = this
         node.previousNode = this.previousNode
         this.previousNode = node
         return node
     }
 
-    insertAfter(node: CLIColorASTNode) {
+    insertAfter(node: SGRAstNode) {
         node.previousNode = this
         node.nextNode = this.nextNode
         this.nextNode = node
         return node
     }
 
-    clone(): CLIColorASTNode {
-        return new CLIColorASTNode(
+    clone(): SGRAstNode {
+        return new SGRAstNode(
             {
                 weight: this.effect.weight,
                 italic: this.effect.italic,
@@ -72,11 +72,11 @@ export class CLIColorASTNode {
         )
     }
 
-    static Default(): CLIColorASTNode {
-        return new CLIColorASTNode(DefaultSGREffects, '')
+    static Default(): SGRAstNode {
+        return new SGRAstNode(DefaultSGREffects, '')
     }
 
-    Default(): CLIColorASTNode {
-        return CLIColorASTNode.Default()
+    Default(): SGRAstNode {
+        return SGRAstNode.Default()
     }
 }

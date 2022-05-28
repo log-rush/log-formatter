@@ -1,4 +1,4 @@
-import { CLIColorASTNode } from '../ast'
+import { SGRAstNode } from '../ast'
 import {
     CommandParserMap,
     CommandResult,
