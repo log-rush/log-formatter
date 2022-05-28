@@ -4,12 +4,12 @@ import {
     parseColor,
     parseRGBColor,
 } from '../commands'
-import { Color256, Color8 } from '../effect'
+import { Color256, Color8, EFFECTS } from '../effect'
 
 describe('ColorParsing tests', () => {
     describe('ColorMode 8', () => {
         it('should detect all possible colors', () => {
-            for (const color of Color8) {
+            for (const color of Color8.map((key) => EFFECTS[key])) {
                 expect(parse8Color(color)?.color).toEqual(color)
             }
         })

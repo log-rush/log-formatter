@@ -4,7 +4,7 @@ import {
     CommandResult,
     SuccessCommandResult,
 } from '../commands'
-import { EFFECTS } from '../effect'
+import { EffectKey } from '../effect'
 import {
     BlinkEffect,
     ColorEffect,
@@ -18,15 +18,18 @@ import {
     TextWeightEffect,
     UnderlineEffect,
 } from '../types'
-import { createSGREffects } from './testUtil'
 
 const expectMatch = (result: CommandResult): result is SuccessCommandResult => {
     expect(result.matches).toBeTruthy()
     return result.matches
 }
-const expectKey = <T extends Record<string, V>, V = unknown>(
+const expectKey = <
+    T extends Record<string, V>,
+    K extends keyof T | string = keyof T,
+    V = unknown,
+>(
     object: T,
-    key: keyof T | string,
+    key: K,
     value?: T[keyof T] | V,
 ) => {
     expect(object[key]).toBeDefined()
@@ -56,7 +59,7 @@ const createApplyCommandTestSuite =
         })
 
         it('should return remaining command', () => {
-            const result = command('xxx')
+            const result = command(';xxx')
             if (expectMatch(result)) {
                 expect(result.remainingCommand).toBe('xxx')
             }
@@ -66,7 +69,7 @@ const createApplyCommandTestSuite =
 describe('Command Tests', () => {
     describe('Reset', () => {
         it('should reset all effects', () => {
-            const result = CommandParserMap[EFFECTS.Reset]('')
+            const result = CommandParserMap[EffectKey.Reset]('')
             if (expectMatch(result)) {
                 for (const [key, value] of Object.entries(DefaultSGREffects)) {
                     expectKey(result.alteredEffects, key, value)
@@ -75,12 +78,12 @@ describe('Command Tests', () => {
         })
 
         it('should should match', () => {
-            const result = CommandParserMap[EFFECTS.Reset]('')
+            const result = CommandParserMap[EffectKey.Reset]('')
             expectMatch(result)
         })
 
         it('should return remaining command', () => {
-            const result = CommandParserMap[EFFECTS.Reset]('xxx')
+            const result = CommandParserMap[EffectKey.Reset]('xxx')
             if (expectMatch(result)) {
                 expect(result.remainingCommand).toBe('xxx')
             }
@@ -89,80 +92,80 @@ describe('Command Tests', () => {
 
     describe(
         'Bold',
-        createApplyCommandTestSuite(CommandParserMap[EFFECTS.Bold], {
-            weight: TextWeightEffect[EFFECTS.Bold],
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.Bold], {
+            weight: TextWeightEffect[EffectKey.Bold],
         }),
     )
 
     describe(
         'Faint',
-        createApplyCommandTestSuite(CommandParserMap[EFFECTS.Faint], {
-            weight: TextWeightEffect[EFFECTS.Faint],
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.Faint], {
+            weight: TextWeightEffect[EffectKey.Faint],
         }),
     )
 
     describe(
         'Italic',
-        createApplyCommandTestSuite(CommandParserMap[EFFECTS.Italic], {
-            italic: ItalicEffect[EFFECTS.Italic],
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.Italic], {
+            italic: ItalicEffect[EffectKey.Italic],
         }),
     )
 
     describe(
         'Underline',
-        createApplyCommandTestSuite(CommandParserMap[EFFECTS.Underline], {
-            underline: UnderlineEffect[EFFECTS.Underline],
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.Underline], {
+            underline: UnderlineEffect[EffectKey.Underline],
         }),
     )
 
     describe(
         'BlinkSlow',
-        createApplyCommandTestSuite(CommandParserMap[EFFECTS.BlinkSlow], {
-            blink: BlinkEffect[EFFECTS.BlinkSlow],
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.BlinkSlow], {
+            blink: BlinkEffect[EffectKey.BlinkSlow],
         }),
     )
 
     describe(
         'BlinkRapid',
-        createApplyCommandTestSuite(CommandParserMap[EFFECTS.BlinkRapid], {
-            blink: BlinkEffect[EFFECTS.BlinkRapid],
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.BlinkRapid], {
+            blink: BlinkEffect[EffectKey.BlinkRapid],
         }),
     )
 
     describe(
         'NegativeImage',
-        createApplyCommandTestSuite(CommandParserMap[EFFECTS.NegativeImage], {
-            inverted: NegativeEffect[EFFECTS.NegativeImage],
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.NegativeImage], {
+            inverted: NegativeEffect[EffectKey.NegativeImage],
         }),
     )
 
     describe(
         'ConcealedCharacters',
         createApplyCommandTestSuite(
-            CommandParserMap[EFFECTS.ConcealedCharacters],
-            { concealed: ConcealedEffect[EFFECTS.ConcealedCharacters] },
+            CommandParserMap[EffectKey.ConcealedCharacters],
+            { concealed: ConcealedEffect[EffectKey.ConcealedCharacters] },
         ),
     )
 
     describe(
         'CrossedOut',
-        createApplyCommandTestSuite(CommandParserMap[EFFECTS.CrossedOut], {
-            crossedOut: CrossedOutEffect[EFFECTS.CrossedOut],
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.CrossedOut], {
+            crossedOut: CrossedOutEffect[EffectKey.CrossedOut],
         }),
     )
 
     describe(
         'DoublyUnderlined',
         createApplyCommandTestSuite(
-            CommandParserMap[EFFECTS.DoublyUnderlined],
-            { underline: UnderlineEffect[EFFECTS.DoublyUnderlined] },
+            CommandParserMap[EffectKey.DoublyUnderlined],
+            { underline: UnderlineEffect[EffectKey.DoublyUnderlined] },
         ),
     )
 
     describe(
         'NormalColorAndWeight',
         createApplyCommandTestSuite(
-            CommandParserMap[EFFECTS.NormalColorAndWeight],
+            CommandParserMap[EffectKey.NormalColorAndWeight],
             {
                 weight: TextWeightEffect.Default,
                 foreground: ColorEffect.Default,
@@ -175,44 +178,92 @@ describe('Command Tests', () => {
 
     describe(
         'NotItalic',
-        createApplyCommandTestSuite(CommandParserMap[EFFECTS.NotItalic], {
-            italic: ItalicEffect[EFFECTS.NotItalic],
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.NotItalic], {
+            italic: ItalicEffect[EffectKey.NotItalic],
         }),
     )
 
     describe(
         'NotUnderlined',
-        createApplyCommandTestSuite(CommandParserMap[EFFECTS.NotUnderlined], {
-            underline: UnderlineEffect[EFFECTS.NotUnderlined],
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.NotUnderlined], {
+            underline: UnderlineEffect[EffectKey.NotUnderlined],
         }),
     )
 
     describe(
         'Steady',
-        createApplyCommandTestSuite(CommandParserMap[EFFECTS.Steady], {
-            blink: BlinkEffect[EFFECTS.Steady],
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.Steady], {
+            blink: BlinkEffect[EffectKey.Steady],
         }),
     )
 
     describe(
         'PositiveImage',
-        createApplyCommandTestSuite(CommandParserMap[EFFECTS.PositiveImage], {
-            inverted: NegativeEffect[EFFECTS.PositiveImage],
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.PositiveImage], {
+            inverted: NegativeEffect[EffectKey.PositiveImage],
         }),
     )
 
     describe(
         'RevealedCharacters',
         createApplyCommandTestSuite(
-            CommandParserMap[EFFECTS.RevealedCharacters],
-            { concealed: ConcealedEffect[EFFECTS.RevealedCharacters] },
+            CommandParserMap[EffectKey.RevealedCharacters],
+            { concealed: ConcealedEffect[EffectKey.RevealedCharacters] },
         ),
     )
 
     describe(
         'NotCrossedOut',
-        createApplyCommandTestSuite(CommandParserMap[EFFECTS.NotCrossedOut], {
-            crossedOut: CrossedOutEffect[EFFECTS.NotCrossedOut],
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.NotCrossedOut], {
+            crossedOut: CrossedOutEffect[EffectKey.NotCrossedOut],
         }),
     )
+
+    describe('Foreground', () => {
+        const command = CommandParserMap[EffectKey.Foreground]
+        it('should apply effects', () => {
+            const result = command('5')
+            if (expectMatch(result)) {
+                expectKey<Partial<SGREffect>, keyof Partial<SGREffect>>(
+                    result.alteredEffects,
+                    'foreground',
+                    '5',
+                )
+                expectKey<Partial<SGREffect>, keyof Partial<SGREffect>>(
+                    result.alteredEffects,
+                    'foregroundMode',
+                    ColorModeEffect[EffectKey.ColorMode8],
+                )
+            }
+        })
+
+        it('should should match', () => {
+            expectMatch(command('5'))
+            expectMatch(command('8;2;12;4;2'))
+            expectMatch(command('8;5;31'))
+        })
+
+        it('should return remaining command', () => {
+            const tests = [
+                {
+                    input: '5;xxx',
+                    remaining: 'xxx',
+                },
+                {
+                    input: '8;2;12;5;29;32',
+                    remaining: '32',
+                },
+                {
+                    input: '8;5;222;13;2',
+                    remaining: '13;2',
+                },
+            ]
+            for (const testCase of tests) {
+                const result = command(testCase.input)
+                if (expectMatch(result)) {
+                    expect(result.remainingCommand).toBe(testCase.remaining)
+                }
+            }
+        })
+    })
 })

@@ -1,4 +1,7 @@
-import { Token } from './types'
+export type Token = {
+    token: EffectKey
+    precedence: number
+}
 
 export const PRECEDENCE = {
     Low: 1,
@@ -6,46 +9,84 @@ export const PRECEDENCE = {
     High: 3,
 } as const
 
-export const EFFECTS = {
-    Reset: '0',
-    // Font Modifier
-    Bold: '1',
-    Faint: '2',
-    Italic: '3',
-    Underline: '4',
-    BlinkSlow: '5',
-    BlinkRapid: '6',
-    NegativeImage: '7',
-    ConcealedCharacters: '8',
-    CrossedOut: '9',
-    // 10 - 20: Fonts / not supported
-    DoublyUnderlined: '21',
-    NormalColorAndWeight: '22',
-    NotItalic: '23',
-    NotUnderlined: '24',
-    Steady: '25',
-    // 26: reserved
-    PositiveImage: '27',
-    RevealedCharacters: '28',
-    NotCrossedOut: '29',
+export enum EffectKey {
+    Reset,
+    Bold,
+    Faint,
+    Italic,
+    Underline,
+    BlinkSlow,
+    BlinkRapid,
+    NegativeImage,
+    ConcealedCharacters,
+    CrossedOut,
+    DoublyUnderlined,
+    NormalColorAndWeight,
+    NotItalic,
+    NotUnderlined,
+    Steady,
+    PositiveImage,
+    RevealedCharacters,
+    NotCrossedOut,
+    ColorBlack,
+    ColorRed,
+    ColorGreen,
+    ColorYellow,
+    ColorBlue,
+    ColorMagenta,
+    ColorCyan,
+    ColorWhite,
+    ColorDefault,
+    Foreground,
+    Background,
+    BrightForeground,
+    BrightBackground,
+    ColorMode8,
+    ColorMode256,
+    ColorModeRGB,
+    ChainCommand,
+}
 
-    // 8-Bit Color Indicator
-    ColorBlack: '0',
-    ColorRed: '1',
-    ColorGreen: '2',
-    ColorYellow: '3',
-    ColorBlue: '4',
-    ColorMagenta: '5',
-    ColorCyan: '6',
-    ColorWhite: '7',
+export const EFFECTS = {
+    [EffectKey.Reset]: '0',
+    // Font Modifier
+    [EffectKey.Bold]: '1',
+    [EffectKey.Faint]: '2',
+    [EffectKey.Italic]: '3',
+    [EffectKey.Underline]: '4',
+    [EffectKey.BlinkSlow]: '5',
+    [EffectKey.BlinkRapid]: '6',
+    [EffectKey.NegativeImage]: '7',
+    [EffectKey.ConcealedCharacters]: '8',
+    [EffectKey.CrossedOut]: '9',
+    // 10 - 20: Fonts / not supported
+    [EffectKey.DoublyUnderlined]: '21',
+    [EffectKey.NormalColorAndWeight]: '22',
+    [EffectKey.NotItalic]: '23',
+    [EffectKey.NotUnderlined]: '24',
+    [EffectKey.Steady]: '25',
+    // 26: reserved
+    [EffectKey.PositiveImage]: '27',
+    [EffectKey.RevealedCharacters]: '28',
+    [EffectKey.NotCrossedOut]: '29',
+
+    // 8 Color Indicator
+    [EffectKey.ColorBlack]: '0',
+    [EffectKey.ColorRed]: '1',
+    [EffectKey.ColorGreen]: '2',
+    [EffectKey.ColorYellow]: '3',
+    [EffectKey.ColorBlue]: '4',
+    [EffectKey.ColorMagenta]: '5',
+    [EffectKey.ColorCyan]: '6',
+    [EffectKey.ColorWhite]: '7',
     // 8: reserved for extended colors
-    ColorDefault: '9',
+    [EffectKey.ColorDefault]: '9',
 
     // Prefixes
-    Foreground: '3',
-    Background: '4',
-    BrightForeground: '9',
-    BrightBackground: '10',
+    [EffectKey.Foreground]: '3',
+    [EffectKey.Background]: '4',
+    [EffectKey.BrightForeground]: '9',
+    [EffectKey.BrightBackground]: '10',
 
     // 50: reserved for canceling 26
     // 51: framed / not supported
@@ -62,66 +103,66 @@ export const EFFECTS = {
     // 65: cancels the effect of the rendition aspects established by parameter values 60 to 64 / not supported
 
     // Suffixes
-    ColorMode8: '',
-    ColorMode256: '8;5;', // 38 / 48 / ...
-    ColorModeRGB: '8;2;',
-    ChainCommand: ';',
+    [EffectKey.ColorMode8]: '',
+    [EffectKey.ColorMode256]: '8;5;', // 38 / 48 / ...
+    [EffectKey.ColorModeRGB]: '8;2;',
+    [EffectKey.ChainCommand]: ';',
 } as const
 
 export const TOKENS: Token[] = [
     ...[
-        EFFECTS.ColorMode8,
-        EFFECTS.ColorBlack,
-        EFFECTS.ColorRed,
-        EFFECTS.ColorGreen,
-        EFFECTS.ColorYellow,
-        EFFECTS.ColorBlue,
-        EFFECTS.ColorMagenta,
-        EFFECTS.ColorCyan,
-        EFFECTS.ColorWhite,
-        EFFECTS.ColorDefault,
+        EffectKey.ColorMode8,
+        EffectKey.ColorBlack,
+        EffectKey.ColorRed,
+        EffectKey.ColorGreen,
+        EffectKey.ColorYellow,
+        EffectKey.ColorBlue,
+        EffectKey.ColorMagenta,
+        EffectKey.ColorCyan,
+        EffectKey.ColorWhite,
+        EffectKey.ColorDefault,
     ].map((token) => ({ token, precedence: PRECEDENCE.Low })),
     ...[
-        EFFECTS.ChainCommand,
-        EFFECTS.Bold,
-        EFFECTS.Faint,
-        EFFECTS.Italic,
-        EFFECTS.Underline,
-        EFFECTS.BlinkSlow,
-        EFFECTS.BlinkRapid,
-        EFFECTS.NegativeImage,
-        EFFECTS.ConcealedCharacters,
-        EFFECTS.CrossedOut,
-        EFFECTS.DoublyUnderlined,
-        EFFECTS.NormalColorAndWeight,
-        EFFECTS.NotItalic,
-        EFFECTS.NotUnderlined,
-        EFFECTS.Steady,
-        EFFECTS.PositiveImage,
-        EFFECTS.RevealedCharacters,
-        EFFECTS.NotCrossedOut,
+        EffectKey.ChainCommand,
+        EffectKey.Bold,
+        EffectKey.Faint,
+        EffectKey.Italic,
+        EffectKey.Underline,
+        EffectKey.BlinkSlow,
+        EffectKey.BlinkRapid,
+        EffectKey.NegativeImage,
+        EffectKey.ConcealedCharacters,
+        EffectKey.CrossedOut,
+        EffectKey.DoublyUnderlined,
+        EffectKey.NormalColorAndWeight,
+        EffectKey.NotItalic,
+        EffectKey.NotUnderlined,
+        EffectKey.Steady,
+        EffectKey.PositiveImage,
+        EffectKey.RevealedCharacters,
+        EffectKey.NotCrossedOut,
     ].map((token) => ({ token, precedence: PRECEDENCE.Medium })),
     ...[
-        EFFECTS.Reset,
-        EFFECTS.ColorMode8,
-        EFFECTS.ColorMode256,
-        EFFECTS.Foreground,
-        EFFECTS.Background,
-        EFFECTS.BrightForeground,
-        EFFECTS.BrightBackground,
+        EffectKey.Reset,
+        EffectKey.ColorMode8,
+        EffectKey.ColorMode256,
+        EffectKey.Foreground,
+        EffectKey.Background,
+        EffectKey.BrightForeground,
+        EffectKey.BrightBackground,
     ].map((token) => ({ token, precedence: PRECEDENCE.High })),
 ]
 
 export const Color8 = [
-    EFFECTS.ColorBlack,
-    EFFECTS.ColorRed,
-    EFFECTS.ColorGreen,
-    EFFECTS.ColorYellow,
-    EFFECTS.ColorBlue,
-    EFFECTS.ColorMagenta,
-    EFFECTS.ColorCyan,
-    EFFECTS.ColorWhite,
-    EFFECTS.ColorDefault,
+    EffectKey.ColorBlack,
+    EffectKey.ColorRed,
+    EffectKey.ColorGreen,
+    EffectKey.ColorYellow,
+    EffectKey.ColorBlue,
+    EffectKey.ColorMagenta,
+    EffectKey.ColorCyan,
+    EffectKey.ColorWhite,
+    EffectKey.ColorDefault,
 ]
 
 export const Color256 = new Array(256).fill(0).map((_, i) => i.toString())

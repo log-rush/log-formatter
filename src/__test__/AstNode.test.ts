@@ -1,5 +1,5 @@
 import { CLIColorASTNode } from '../ast'
-import { EFFECTS } from '../effect'
+import { EffectKey } from '../effect'
 import { BlinkEffect } from '../types'
 import { createSGREffects } from './testUtil'
 
@@ -62,8 +62,8 @@ describe('AST Node Test', () => {
         const a = new CLIColorASTNode(createSGREffects(), 'a')
         const b = a.clone()
 
-        a.setEffect('blink', BlinkEffect[EFFECTS.BlinkRapid])
-        expect(a.effect.blink).toEqual(BlinkEffect[EFFECTS.BlinkRapid])
+        a.setEffect('blink', BlinkEffect[EffectKey.BlinkRapid])
+        expect(a.effect.blink).toEqual(BlinkEffect[EffectKey.BlinkRapid])
         expect(a.effect.blink).not.toEqual(b.effect.blink)
 
         a.content = 'xxx'
