@@ -112,14 +112,18 @@ export const TOKENS: Token[] = [
     ].map((token) => ({ token, precedence: PRECEDENCE.High })),
 ]
 
-export const PARTIAL_TOKENS: string[] = [
-    EFFECTS.Foreground,
-    EFFECTS.Background,
-    EFFECTS.BrightForeground,
-    EFFECTS.BrightBackground,
-    // second level
-    EFFECTS.ColorMode8,
-    EFFECTS.ColorMode256,
-].reverse()
+export const Color8 = [
+    EFFECTS.ColorBlack,
+    EFFECTS.ColorRed,
+    EFFECTS.ColorGreen,
+    EFFECTS.ColorYellow,
+    EFFECTS.ColorBlue,
+    EFFECTS.ColorMagenta,
+    EFFECTS.ColorCyan,
+    EFFECTS.ColorWhite,
+    EFFECTS.ColorDefault,
+]
+
+export const Color256 = new Array(256).fill(0).map((_, i) => i.toString())
 
 // \033[38;2;255;0;0;48;2;0;255;0m

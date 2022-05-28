@@ -1,4 +1,4 @@
-import { EFFECTS } from './effect'
+import { Color8, EFFECTS } from './effect'
 import { CLIColorASTNode } from './ast'
 import {
     BlinkEffect,
@@ -9,6 +9,7 @@ import {
     DefaultSGREffects,
     ItalicEffect,
     NegativeEffect,
+    PropertyOf,
     SGREffect,
     TextWeightEffect,
     UnderlineEffect,
@@ -50,6 +51,51 @@ const setEffects =
             },
         }
     }
+
+export type ColorResult = {
+    color: string
+    remaining: string
+}
+
+const parseColor = (command: string): ColorResult | undefined => {
+    if (command.startsWith(EFFECTS.ColorModeRGB))
+        return parseRGBColor(command.slice(EFFECTS.ColorModeRGB.length))
+    if (command.startsWith(EFFECTS.ColorMode256))
+        return parse256Color(command.slice(EFFECTS.ColorModeRGB.length))
+    if (command.startsWith(EFFECTS.ColorMode8))
+        return parse8Color(command.slice(EFFECTS.ColorModeRGB.length))
+    return undefined
+}
+
+export const parseRGBColor = (command: string): ColorResult | undefined => {
+    return undefined
+}
+
+export const parse256Color = (command: string): ColorResult | undefined => {
+    return undefined
+}
+
+export const parse8Color = (command: string): ColorResult | undefined => {
+    if (command.length === 1 && Color8.some((color) => color === command)) {
+        return {
+            color: command,
+            remaining: '',
+        }
+    }
+    if (command.length > 1 && command.includes(EFFECTS.ChainCommand)) {
+        const index = command.indexOf(EFFECTS.ChainCommand)
+        const newCommand = command.substring(0, index)
+        const remaining = command.substring(index + 1)
+        const result = parse8Color(newCommand)
+        return result
+            ? {
+                  color: result.color,
+                  remaining: remaining,
+              }
+            : undefined
+    }
+    return undefined
+}
 
 export const CommandParserMap: Record<
     /*keyof typeof EFFECTS*/ string,
