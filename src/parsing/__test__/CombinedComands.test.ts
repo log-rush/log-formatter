@@ -1,6 +1,6 @@
 import { SGRAstNode } from '../ast'
-import { EffectKey } from '../effect'
-import { SGRCommandParser } from '../parse'
+import { EffectKey } from '../effects'
+import { SGRCommandParser } from '../parser'
 import { ColorModeEffect, NegativeEffect, UnderlineEffect } from '../types'
 
 const expectNode = (node: SGRAstNode | undefined): node is SGRAstNode => {

@@ -1,4 +1,4 @@
-export * from './parse'
+export * from './parser'
 export * from './ast'
 export {
     SGREffect,

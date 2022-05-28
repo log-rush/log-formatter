@@ -4,7 +4,7 @@ import {
     CommandResult,
     SuccessCommandResult,
 } from '../commands'
-import { EffectKey } from '../effect'
+import { EffectKey } from '../effects'
 import {
     BlinkEffect,
     ColorEffect,

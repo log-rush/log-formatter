@@ -1,4 +1,4 @@
-import { TOKENS } from '../effect'
+import { TOKENS } from '../effects'
 
 describe('Token tests', () => {
     test('TOKENS should be ordered by precedence', () => {

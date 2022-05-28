@@ -1,4 +1,4 @@
-import { SGRCommandParser } from '../parse'
+import { SGRCommandParser } from '../parser'
 
 describe('Detect SGR Sequences', () => {
     const parser = new SGRCommandParser()

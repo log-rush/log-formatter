@@ -4,7 +4,7 @@ import {
     parseColor,
     parseRGBColor,
 } from '../commands'
-import { Color256, Color8, EFFECTS } from '../effect'
+import { Color256, Color8, EFFECTS } from '../effects'
 
 describe('ColorParsing tests', () => {
     describe('ColorMode 8', () => {

@@ -1,4 +1,4 @@
-import { Color256, Color8, EffectKey, EFFECTS } from './effect'
+import { Color256, Color8, EffectKey, EFFECTS } from './effects'
 import { SGRAstNode } from './ast'
 import {
     BlinkEffect,

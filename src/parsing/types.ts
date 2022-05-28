@@ -1,4 +1,4 @@
-import { EffectKey } from './effect'
+import { EffectKey } from './effects'
 
 export type DefaultAble<T> = {
     [key: string]: T

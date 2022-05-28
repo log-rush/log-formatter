@@ -1,6 +1,6 @@
 import { SGRAstNode } from './ast'
 import { CommandParserMap } from './commands'
-import { EffectKey, EFFECTS, TOKENS } from './effect'
+import { EffectKey, EFFECTS, TOKENS } from './effects'
 import { DefaultSGREffects, SGREffect } from './types'
 
 export const CTRL_CHARS = [

@@ -1,5 +1,5 @@
 import { SGRAstNode } from '../ast'
-import { EffectKey } from '../effect'
+import { EffectKey } from '../effects'
 import { BlinkEffect } from '../types'
 import { createSGREffects } from './testUtil'
 
