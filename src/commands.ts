@@ -1,4 +1,4 @@
-import { Color8, EFFECTS } from './effect'
+import { Color256, Color8, EFFECTS } from './effect'
 import { CLIColorASTNode } from './ast'
 import {
     BlinkEffect,
@@ -72,7 +72,21 @@ export const parseRGBColor = (command: string): ColorResult | undefined => {
 }
 
 export const parse256Color = (command: string): ColorResult | undefined => {
-    return undefined
+    if (command.length < 4 && Color256.some((color) => color === command)) {
+        return {
+            color: command,
+            remaining: '',
+        }
+    } else if (command.includes(EFFECTS.ChainCommand)) {
+        const index = command.indexOf(EFFECTS.ChainCommand)
+        const result = parse256Color(command.substring(0, index))
+        return result
+            ? {
+                  color: result.color,
+                  remaining: command.substring(index + 1),
+              }
+            : undefined
+    }
 }
 
 export const parse8Color = (command: string): ColorResult | undefined => {
@@ -81,16 +95,13 @@ export const parse8Color = (command: string): ColorResult | undefined => {
             color: command,
             remaining: '',
         }
-    }
-    if (command.length > 1 && command.includes(EFFECTS.ChainCommand)) {
+    } else if (command.length > 1 && command.includes(EFFECTS.ChainCommand)) {
         const index = command.indexOf(EFFECTS.ChainCommand)
-        const newCommand = command.substring(0, index)
-        const remaining = command.substring(index + 1)
-        const result = parse8Color(newCommand)
+        const result = parse8Color(command.substring(0, index))
         return result
             ? {
                   color: result.color,
-                  remaining: remaining,
+                  remaining: command.substring(index + 1),
               }
             : undefined
     }
