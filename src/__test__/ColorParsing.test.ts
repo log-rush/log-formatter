@@ -1,4 +1,9 @@
-import { parse256Color, parse8Color } from '../commands'
+import {
+    parse256Color,
+    parse8Color,
+    parseColor,
+    parseRGBColor,
+} from '../commands'
 import { Color256, Color8 } from '../effect'
 
 describe('ColorParsing tests', () => {
@@ -67,5 +72,70 @@ describe('ColorParsing tests', () => {
                 'asdas;dsd;',
             )
         })
+    })
+
+    describe('ColorMode RGB', () => {
+        it('should detect  possible colors', () => {
+            expect(
+                parseRGBColor('16;16;16')?.color?.toLocaleLowerCase(),
+            ).toEqual('#101010')
+            expect(
+                parseRGBColor('192;168;0')?.color?.toLocaleLowerCase(),
+            ).toEqual('#c0a800')
+            expect(parseRGBColor('0;0;0')?.color?.toLocaleLowerCase()).toEqual(
+                '#000000',
+            )
+        })
+
+        it('should catch non ColorMode256 colors', () => {
+            expect(parseRGBColor('2;2')).toBeUndefined()
+            expect(parseRGBColor('saddasd')).toBeUndefined()
+            expect(parseRGBColor('300;212;5')).toBeUndefined()
+            expect(parseRGBColor('300;ccc;5')).toBeUndefined()
+        })
+
+        it('should detect chained commands', () => {
+            expect(
+                parseRGBColor('16;16;16;')?.color?.toLocaleLowerCase(),
+            ).toEqual('#101010')
+            expect(
+                parseRGBColor(
+                    '192;168;0;assadsa;a',
+                )?.color?.toLocaleLowerCase(),
+            ).toEqual('#c0a800')
+            expect(
+                parseRGBColor('0;0;0;1;;;;adsad;')?.color?.toLocaleLowerCase(),
+            ).toEqual('#000000')
+        })
+
+        it('should detect invalid chained commands', () => {
+            expect(parseRGBColor('16;16;xxx')).toBeUndefined()
+            expect(parseRGBColor('192;168;assadsa;a')).toBeUndefined()
+        })
+
+        it('should return correct remaining command', () => {
+            expect(parseRGBColor('192;168;0')?.remaining).toEqual('')
+            expect(parseRGBColor('192;168;0;xxx')?.remaining).toEqual('xxx')
+            expect(parseRGBColor('192;168;0;xxx;aaa')?.remaining).toEqual(
+                'xxx;aaa',
+            )
+            expect(parseRGBColor('192;168;0;;;;')?.remaining).toEqual(';;;')
+        })
+    })
+
+    it('should detect the correct parser function', () => {
+        expect(parseColor('1')?.color).toEqual('1')
+        expect(parseColor('8;5;192')?.color).toEqual('192')
+        expect(parseColor('8;2;16;16;16')?.color).toEqual('#101010')
+    })
+
+    it('should return undefined for invalid color definitions', () => {
+        expect(parseColor('8;4')).toBeUndefined()
+        expect(parseColor('x')).toBeUndefined()
+    })
+
+    it('should return correct ColorMode8 colors', () => {
+        expect(parseColor('192')).toBeUndefined()
+        expect(parseColor('5')?.color).toEqual('5')
     })
 })

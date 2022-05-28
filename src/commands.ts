@@ -57,18 +57,35 @@ export type ColorResult = {
     remaining: string
 }
 
-const parseColor = (command: string): ColorResult | undefined => {
+export const parseColor = (command: string): ColorResult | undefined => {
     if (command.startsWith(EFFECTS.ColorModeRGB))
         return parseRGBColor(command.slice(EFFECTS.ColorModeRGB.length))
     if (command.startsWith(EFFECTS.ColorMode256))
-        return parse256Color(command.slice(EFFECTS.ColorModeRGB.length))
+        return parse256Color(command.slice(EFFECTS.ColorMode256.length))
     if (command.startsWith(EFFECTS.ColorMode8))
-        return parse8Color(command.slice(EFFECTS.ColorModeRGB.length))
+        return parse8Color(command.slice(EFFECTS.ColorMode8.length))
     return undefined
 }
 
 export const parseRGBColor = (command: string): ColorResult | undefined => {
-    return undefined
+    const amountsOfChainCharacters = command
+        .split('')
+        .reduce((sum, char) => sum + +(char === EFFECTS.ChainCommand), 0)
+
+    if (amountsOfChainCharacters >= 2) {
+        const [r, g, b, ...rest] = command.split(EFFECTS.ChainCommand)
+        const [numR, numG, numB] = [r, g, b].map((str) => parseInt(str, 10))
+        if ([numR, numG, numB].some(isNaN)) return undefined
+        if ([numR, numG, numB].some((num) => num > 255)) return undefined
+        return {
+            color: `#${numR.toString(16).padStart(2, '0')}${numG
+                .toString(16)
+                .padStart(2, '0')}${numB.toString(16).padStart(2, '0')}`,
+            remaining: rest.join(EFFECTS.ChainCommand),
+        }
+    } else {
+        return undefined
+    }
 }
 
 export const parse256Color = (command: string): ColorResult | undefined => {
