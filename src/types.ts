@@ -68,9 +68,6 @@ export const ColorEffect = {
     [EFFECTS.ColorCyan]: 8,
     [EFFECTS.ColorWhite]: 9,
     [EFFECTS.NormalColorAndWeight]: 1,
-    CUSTOM: '',
-    [EFFECTS.ColorMode256]: '',
-    [EFFECTS.ColorModeRGB]: '',
     Default: 1,
 } as const
 
@@ -103,9 +100,9 @@ export type SGREffect = {
     italic: PropertyOf<typeof ItalicEffect>
     underline: PropertyOf<typeof UnderlineEffect>
     foregroundMode: PropertyOf<typeof ColorModeEffect>
-    foreground: PropertyOf<typeof ColorEffect>
+    foreground: PropertyOf<typeof ColorEffect> | string
     backgroundMode: PropertyOf<typeof ColorModeEffect>
-    background: PropertyOf<typeof ColorEffect>
+    background: PropertyOf<typeof ColorEffect> | string
     blink: PropertyOf<typeof BlinkEffect>
     inverted: PropertyOf<typeof NegativeEffect>
     crossedOut: PropertyOf<typeof CrossedOutEffect>
