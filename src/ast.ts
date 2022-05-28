@@ -67,7 +67,11 @@ export class CLIColorASTNode {
         )
     }
 
-    Default(): CLIColorASTNode {
+    static Default(): CLIColorASTNode {
         return new CLIColorASTNode(DefaultSGREffects, '')
+    }
+
+    Default(): CLIColorASTNode {
+        return CLIColorASTNode.Default()
     }
 }

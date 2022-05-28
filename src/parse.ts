@@ -1,3 +1,8 @@
+import { CLIColorASTNode } from './ast'
+import { CommandParserMap } from './commands'
+import { EffectKey, EFFECTS, TOKENS } from './effect'
+import { DefaultSGREffects, SGREffect } from './types'
+
 export const CTRL_CHARS = [
     '\x1b',
     '\\e',
@@ -52,5 +57,40 @@ export class Parser {
         }
     }
 
-    parseSGRCommand(data: string) {}
+    parseSGRCommand(data: string): CLIColorASTNode | undefined {
+        const node = new CLIColorASTNode(DefaultSGREffects, '')
+        let command = data
+        console.log(TOKENS)
+        while (command.length > 0) {
+            let hasFoundToken = false
+
+            for (let i = 0; i < TOKENS.length; i++) {
+                if (command.startsWith(EFFECTS[TOKENS[i].token])) {
+                    const token = TOKENS[i].token
+                    const commandParser = CommandParserMap[token]
+
+                    if (!commandParser) return undefined
+                    const result = commandParser(
+                        command.slice(EFFECTS[token].length),
+                    )
+
+                    if (result.matches) {
+                        hasFoundToken = true
+                        command = result.remainingCommand
+                        for (const [key, value] of Object.entries(
+                            result.alteredEffects,
+                        )) {
+                            node.setEffect(key as keyof SGREffect, value)
+                        }
+                        break
+                    }
+                }
+            }
+
+            if (!hasFoundToken) {
+                return undefined
+            }
+        }
+        return node
+    }
 }

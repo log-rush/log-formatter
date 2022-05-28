@@ -112,6 +112,7 @@ export const EFFECTS = {
 export const TOKENS: Token[] = [
     ...[
         EffectKey.ColorMode8,
+        EffectKey.ColorMode8,
         EffectKey.ColorBlack,
         EffectKey.ColorRed,
         EffectKey.ColorGreen,
@@ -144,14 +145,13 @@ export const TOKENS: Token[] = [
     ].map((token) => ({ token, precedence: PRECEDENCE.Medium })),
     ...[
         EffectKey.Reset,
-        EffectKey.ColorMode8,
         EffectKey.ColorMode256,
         EffectKey.Foreground,
         EffectKey.Background,
         EffectKey.BrightForeground,
         EffectKey.BrightBackground,
     ].map((token) => ({ token, precedence: PRECEDENCE.High })),
-]
+].reverse()
 
 export const Color8 = [
     EffectKey.ColorBlack,
