@@ -17,6 +17,13 @@ describe('Detect SGR Sequences', () => {
         expect(commandParser).toBeCalledWith(command)
     })
 
+    it('should from real example ', () => {
+        const data = `[35mdebug`
+        expect(commandParser).not.toBeCalled()
+        parser.parse(data)
+        expect(commandParser).toBeCalledWith('35')
+    })
+
     it('should detect \\e', () => {
         const command = '37;48;2;12;24;36'
         const data = `\\e[${command}m`
