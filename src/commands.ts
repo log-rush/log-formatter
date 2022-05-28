@@ -85,6 +85,19 @@ const setEffectsSetter =
         return { matches: false }
     }
 
+const createParseColorResultMapper =
+    (type: 'foreground' | 'background') => (command: string) => {
+        const result = parseColor(command)
+        if (!result) return undefined
+        return {
+            effects: {
+                [type]: result.color,
+                [`${type}Mode`]: result.mode,
+            },
+            remaining: result.remaining,
+        }
+    }
+
 export type ColorResult = {
     color: string
     remaining: string
@@ -259,15 +272,16 @@ export const CommandParserMap: Record<
         'crossedOut',
         CrossedOutEffect[EffectKey.NotCrossedOut],
     ),
-    [EffectKey.Foreground]: setEffectsSetter((command) => {
-        const result = parseColor(command)
-        if (!result) return undefined
-        return {
-            effects: {
-                foreground: result.color,
-                foregroundMode: result.mode,
-            },
-            remaining: result.remaining,
-        }
-    }),
+    [EffectKey.Foreground]: setEffectsSetter(
+        createParseColorResultMapper('foreground'),
+    ),
+    [EffectKey.BrightForeground]: setEffectsSetter(
+        createParseColorResultMapper('foreground'),
+    ),
+    [EffectKey.Background]: setEffectsSetter(
+        createParseColorResultMapper('background'),
+    ),
+    [EffectKey.BrightBackground]: setEffectsSetter(
+        createParseColorResultMapper('background'),
+    ),
 }

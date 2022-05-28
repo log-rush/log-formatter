@@ -66,6 +66,82 @@ const createApplyCommandTestSuite =
         })
     }
 
+const createApplyColorTestSuite =
+    (
+        command: typeof CommandParserMap[keyof typeof CommandParserMap],
+        type: 'foreground' | 'background',
+    ) =>
+    () => {
+        it('should apply effects', () => {
+            const tests = [
+                {
+                    input: '5',
+                    color: '5',
+                    mode: ColorModeEffect[EffectKey.ColorMode8],
+                },
+                {
+                    input: '8;2;12;13;14',
+                    color: '#0c0d0e',
+                    mode: ColorModeEffect[EffectKey.ColorModeRGB],
+                },
+                {
+                    input: '8;5;124',
+                    color: '124',
+                    mode: ColorModeEffect[EffectKey.ColorMode256],
+                },
+                {
+                    input: '3;adsal',
+                    color: '3',
+                    mode: ColorModeEffect[EffectKey.ColorMode8],
+                },
+            ]
+            for (const testCase of tests) {
+                const result = command(testCase.input)
+                if (expectMatch(result)) {
+                    expectKey<Partial<SGREffect>, keyof Partial<SGREffect>>(
+                        result.alteredEffects,
+                        type,
+                        testCase.color,
+                    )
+                    expectKey<Partial<SGREffect>, keyof Partial<SGREffect>>(
+                        result.alteredEffects,
+                        `${type}Mode`,
+                        testCase.mode,
+                    )
+                }
+            }
+        })
+
+        it('should should match', () => {
+            expectMatch(command('5'))
+            expectMatch(command('8;2;12;4;2'))
+            expectMatch(command('8;5;31'))
+        })
+
+        it('should return remaining command', () => {
+            const tests = [
+                {
+                    input: '5;xxx',
+                    remaining: 'xxx',
+                },
+                {
+                    input: '8;2;12;5;29;32',
+                    remaining: '32',
+                },
+                {
+                    input: '8;5;222;13;2',
+                    remaining: '13;2',
+                },
+            ]
+            for (const testCase of tests) {
+                const result = command(testCase.input)
+                if (expectMatch(result)) {
+                    expect(result.remainingCommand).toBe(testCase.remaining)
+                }
+            }
+        })
+    }
+
 describe('Command Tests', () => {
     describe('Reset', () => {
         it('should reset all effects', () => {
@@ -219,51 +295,35 @@ describe('Command Tests', () => {
         }),
     )
 
-    describe('Foreground', () => {
-        const command = CommandParserMap[EffectKey.Foreground]
-        it('should apply effects', () => {
-            const result = command('5')
-            if (expectMatch(result)) {
-                expectKey<Partial<SGREffect>, keyof Partial<SGREffect>>(
-                    result.alteredEffects,
-                    'foreground',
-                    '5',
-                )
-                expectKey<Partial<SGREffect>, keyof Partial<SGREffect>>(
-                    result.alteredEffects,
-                    'foregroundMode',
-                    ColorModeEffect[EffectKey.ColorMode8],
-                )
-            }
-        })
+    describe(
+        'Foreground',
+        createApplyColorTestSuite(
+            CommandParserMap[EffectKey.Foreground],
+            'foreground',
+        ),
+    )
 
-        it('should should match', () => {
-            expectMatch(command('5'))
-            expectMatch(command('8;2;12;4;2'))
-            expectMatch(command('8;5;31'))
-        })
+    describe(
+        'BrightForeground',
+        createApplyColorTestSuite(
+            CommandParserMap[EffectKey.BrightForeground],
+            'foreground',
+        ),
+    )
 
-        it('should return remaining command', () => {
-            const tests = [
-                {
-                    input: '5;xxx',
-                    remaining: 'xxx',
-                },
-                {
-                    input: '8;2;12;5;29;32',
-                    remaining: '32',
-                },
-                {
-                    input: '8;5;222;13;2',
-                    remaining: '13;2',
-                },
-            ]
-            for (const testCase of tests) {
-                const result = command(testCase.input)
-                if (expectMatch(result)) {
-                    expect(result.remainingCommand).toBe(testCase.remaining)
-                }
-            }
-        })
-    })
+    describe(
+        'Background',
+        createApplyColorTestSuite(
+            CommandParserMap[EffectKey.Background],
+            'background',
+        ),
+    )
+
+    describe(
+        'BrightBackground',
+        createApplyColorTestSuite(
+            CommandParserMap[EffectKey.BrightBackground],
+            'background',
+        ),
+    )
 })
