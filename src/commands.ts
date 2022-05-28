@@ -202,15 +202,17 @@ export const parse8Color = (command: string): ColorResult | undefined => {
     return undefined
 }
 
-export const CommandParserMap: Record<
-    /*keyof typeof EffectKey*/ string,
-    ParserFunc
-> = {
+export const CommandParserMap: Record<string, ParserFunc> = {
     [EffectKey.Reset]: (command) => {
+        if (command.startsWith(ChainCommandCharacter) || command.length === 0) {
+            return {
+                matches: true,
+                alteredEffects: DefaultSGREffects,
+                remainingCommand: command.substring(1),
+            }
+        }
         return {
-            matches: true,
-            alteredEffects: DefaultSGREffects,
-            remainingCommand: command,
+            matches: false,
         }
     },
     [EffectKey.Bold]: applyEffect('weight', TextWeightEffect[EffectKey.Bold]),

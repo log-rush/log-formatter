@@ -159,7 +159,7 @@ describe('Command Tests', () => {
         })
 
         it('should return remaining command', () => {
-            const result = CommandParserMap[EffectKey.Reset]('xxx')
+            const result = CommandParserMap[EffectKey.Reset](';xxx')
             if (expectMatch(result)) {
                 expect(result.remainingCommand).toBe('xxx')
             }

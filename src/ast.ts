@@ -15,7 +15,7 @@ export class CLIColorASTNode {
         next?: CLIColorASTNode,
         previous?: CLIColorASTNode,
     ) {
-        this.effect = effect
+        this.effect = { ...effect }
         this.content = content
         this.nextNode = next
         this.previousNode = previous
@@ -31,6 +31,11 @@ export class CLIColorASTNode {
 
     setContent(value: string): CLIColorASTNode {
         this.content = value
+        return this.clone()
+    }
+
+    appendContent(value: string): CLIColorASTNode {
+        this.content += value
         return this.clone()
     }
 

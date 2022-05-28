@@ -16,11 +16,14 @@ export const OPEN_BYTE = '['
 export const CLOSE_BYTE = 'm'
 
 export class Parser {
-    parse(data: string) {
+    parse(data: string): CLIColorASTNode {
         let pointer = 0
         let startedSQRCommand = false
         let startIndex = undefined
         let endIndex = undefined
+        let contentStart = 0
+        let ASTRoot = CLIColorASTNode.Default()
+        let ASTHead = ASTRoot
 
         while (pointer < data.length) {
             const char = data[pointer]
@@ -33,6 +36,7 @@ export class Parser {
                 ) {
                     // begin sequence
                     startedSQRCommand = true
+                    ASTHead.appendContent(data.substring(contentStart, pointer))
                     pointer += CtrlChar.length
                     startIndex = pointer
                     endIndex = undefined
@@ -47,20 +51,38 @@ export class Parser {
                     char === CLOSE_BYTE
                 ) {
                     endIndex = pointer
-                    this.parseSGRCommand(data.slice(startIndex + 1, endIndex))
+                    const node = this.parseSGRCommand(
+                        data.slice(startIndex + 1, endIndex),
+                    )
+
+                    if (node) {
+                        ASTHead.insertAfter(node)
+                        ASTHead = node
+                    }
+
+                    contentStart = pointer + 1
+                    startedSQRCommand = false
                     startIndex = undefined
                     endIndex = undefined
-                    startedSQRCommand = false
                 }
             }
             pointer++
         }
+
+        if (pointer > contentStart) {
+            const finalNode = CLIColorASTNode.Default()
+            finalNode.setContent(data.substring(contentStart, pointer))
+            ASTHead.insertAfter(finalNode)
+            ASTHead = finalNode
+        }
+
+        return ASTRoot
     }
 
     parseSGRCommand(data: string): CLIColorASTNode | undefined {
         const node = new CLIColorASTNode(DefaultSGREffects, '')
         let command = data
-        console.log(TOKENS)
+
         while (command.length > 0) {
             let hasFoundToken = false
 
