@@ -5,6 +5,7 @@ import {
     ConcealedEffect,
     CrossedOutEffect,
     ItalicEffect,
+    NegativeEffect,
     SGREffect,
     TextWeightEffect,
     UnderlineEffect,
@@ -19,6 +20,7 @@ export const createSGREffects = ({
     backgroundMode,
     background,
     blink,
+    inverted,
     crossedOut,
     concealed,
 }: Partial<SGREffect> = {}): SGREffect => ({
@@ -30,6 +32,7 @@ export const createSGREffects = ({
     backgroundMode: backgroundMode ?? ColorModeEffect.Default,
     background: background ?? ColorEffect.Default,
     blink: blink ?? BlinkEffect.Default,
+    inverted: inverted ?? NegativeEffect.Default,
     crossedOut: crossedOut ?? CrossedOutEffect.Default,
     concealed: concealed ?? ConcealedEffect.Default,
 })

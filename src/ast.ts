@@ -1,4 +1,4 @@
-import { EffectsMap, SGREffect } from './types'
+import { DefaultSGREffects, EffectsMap, SGREffect } from './types'
 
 export class CLIColorASTNode {
     readonly effect: SGREffect
@@ -68,21 +68,6 @@ export class CLIColorASTNode {
     }
 
     Default(): CLIColorASTNode {
-        return new CLIColorASTNode(
-            {
-                weight: EffectsMap.weight.Default,
-                italic: EffectsMap.italic.Default,
-                underline: EffectsMap.underline.Default,
-                foreground: EffectsMap.foreground.Default,
-                foregroundMode: EffectsMap.foregroundMode.Default,
-                background: EffectsMap.background.Default,
-                backgroundMode: EffectsMap.backgroundMode.Default,
-                blink: EffectsMap.blink.Default,
-                inverted: EffectsMap.inverted.Default,
-                crossedOut: EffectsMap.crossedOut.Default,
-                concealed: EffectsMap.concealed.Default,
-            },
-            '',
-        )
+        return new CLIColorASTNode(DefaultSGREffects, '')
     }
 }

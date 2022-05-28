@@ -1,33 +1,49 @@
 import { CLIColorASTNode } from '../ast'
-import { CommandParserMap } from '../commands'
+import {
+    CommandParserMap,
+    CommandResult,
+    SuccessCommandResult,
+} from '../commands'
 import { EFFECTS } from '../effect'
-import { BlinkEffect } from '../types'
+import { BlinkEffect, DefaultSGREffects } from '../types'
 import { createSGREffects } from './testUtil'
+
+const expectMatch = (result: CommandResult): result is SuccessCommandResult => {
+    expect(result.matches).toBeTruthy()
+    return result.matches
+}
+const expectKey = <T extends Record<string, V>, V = unknown>(
+    object: T,
+    key: keyof T | string,
+    value?: T[keyof T] | V,
+) => {
+    expect(object[key]).toBeDefined()
+    if (value) {
+        expect(object[key]).toEqual(value)
+    }
+}
 
 describe('Command Tests', () => {
     describe('Reset', () => {
-        it('should append a new ast node with default settings', () => {
-            const rootNode = new CLIColorASTNode(createSGREffects(), 'r')
-            const newHead = CommandParserMap[EFFECTS.Reset]('', rootNode)
-            expect(newHead.previousNode).toEqual(rootNode)
-            expect(newHead.effect).toEqual(newHead.Default().effect)
-        })
-
         it('should reset all effects', () => {
-            const rootNode = new CLIColorASTNode(
-                createSGREffects({ blink: BlinkEffect[EFFECTS.BlinkRapid] }),
-                'r',
-            )
-            const newHead = CommandParserMap[EFFECTS.Reset]('', rootNode)
-            expect(newHead.previousNode).toEqual(rootNode)
-            expect(newHead.effect).toEqual(newHead.Default().effect)
+            const result = CommandParserMap[EFFECTS.Reset]('')
+            if (expectMatch(result)) {
+                for (const [key, value] of Object.entries(DefaultSGREffects)) {
+                    expectKey(result.alteredEffects, key, value)
+                }
+            }
         })
 
-        it('should ignore the remaining command', () => {
-            const rootNode = new CLIColorASTNode(createSGREffects(), 'r')
-            const newHead = CommandParserMap[EFFECTS.Reset](';31', rootNode)
-            expect(newHead.previousNode).toEqual(rootNode)
-            expect(newHead.effect).toEqual(newHead.Default().effect)
+        it('should should match', () => {
+            const result = CommandParserMap[EFFECTS.Reset]('')
+            expectMatch(result)
+        })
+
+        it('should return remaining command', () => {
+            const result = CommandParserMap[EFFECTS.Reset]('xxx')
+            if (expectMatch(result)) {
+                expect(result.remainingCommand).toBe('xxx')
+            }
         })
     })
 })
