@@ -15,7 +15,7 @@ export const CTRL_CHARS = [
 export const OPEN_BYTE = '['
 export const CLOSE_BYTE = 'm'
 
-export class Parser {
+export class SGRCommandParser {
     parse(data: string): SGRAstNode {
         let pointer = 0
         let startedSQRCommand = false

@@ -1,6 +1,6 @@
 import { SGRAstNode } from '../ast'
 import { EffectKey } from '../effect'
-import { Parser } from '../parse'
+import { SGRCommandParser } from '../parse'
 import { ColorModeEffect, NegativeEffect, UnderlineEffect } from '../types'
 
 const expectNode = (node: SGRAstNode | undefined): node is SGRAstNode => {
@@ -12,7 +12,7 @@ describe('Combined Command Parsing Tests', () => {
     let parserFunc: (command: string) => SGRAstNode | undefined
 
     beforeEach(() => {
-        const parser = new Parser()
+        const parser = new SGRCommandParser()
         parserFunc = parser.parseSGRCommand
     })
 

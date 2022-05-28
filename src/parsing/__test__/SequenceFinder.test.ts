@@ -1,7 +1,7 @@
-import { Parser } from '../parse'
+import { SGRCommandParser } from '../parse'
 
 describe('Detect SGR Sequences', () => {
-    const parser = new Parser()
+    const parser = new SGRCommandParser()
     let commandParser: jest.Mock
 
     beforeEach(() => {

@@ -1,6 +1,6 @@
 import { SGRAstNode } from '../ast'
 import { EffectKey } from '../effect'
-import { Parser } from '../parse'
+import { SGRCommandParser } from '../parse'
 import { ColorModeEffect, TextWeightEffect } from '../types'
 
 const expectNode = (node: SGRAstNode | undefined): node is SGRAstNode => {
@@ -9,10 +9,10 @@ const expectNode = (node: SGRAstNode | undefined): node is SGRAstNode => {
 }
 
 describe('Parser Tests', () => {
-    let parser: Parser
+    let parser: SGRCommandParser
 
     beforeEach(() => {
-        parser = new Parser()
+        parser = new SGRCommandParser()
     })
 
     it('should parse simple commands', () => {
