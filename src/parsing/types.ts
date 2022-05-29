@@ -15,9 +15,9 @@ export const TextWeightEffect = {
 } as const
 
 export const ItalicEffect = {
-    [EffectKey.Italic]: true,
-    [EffectKey.NotItalic]: false,
-    Default: false,
+    [EffectKey.Italic]: 1,
+    [EffectKey.NotItalic]: 2,
+    Default: 2,
 } as const
 
 export const UnderlineEffect = {
@@ -28,21 +28,21 @@ export const UnderlineEffect = {
 } as const
 
 export const NegativeEffect = {
-    [EffectKey.NegativeImage]: true,
-    [EffectKey.PositiveImage]: false,
-    Default: false,
+    [EffectKey.NegativeImage]: 1,
+    [EffectKey.PositiveImage]: 2,
+    Default: 2,
 } as const
 
 export const ConcealedEffect = {
-    [EffectKey.ConcealedCharacters]: true,
-    [EffectKey.RevealedCharacters]: false,
-    Default: false,
+    [EffectKey.ConcealedCharacters]: 1,
+    [EffectKey.RevealedCharacters]: 2,
+    Default: 2,
 } as const
 
 export const CrossedOutEffect = {
-    [EffectKey.CrossedOut]: true,
-    [EffectKey.NotCrossedOut]: false,
-    Default: false,
+    [EffectKey.CrossedOut]: 1,
+    [EffectKey.NotCrossedOut]: 2,
+    Default: 2,
 } as const
 
 export const BlinkEffect = {
@@ -53,17 +53,9 @@ export const BlinkEffect = {
 } as const
 
 export const ColorEffect = {
-    [EffectKey.ColorDefault]: 1,
-    [EffectKey.ColorBlack]: 2,
-    [EffectKey.ColorRed]: 3,
-    [EffectKey.ColorGreen]: 4,
-    [EffectKey.ColorYellow]: 5,
-    [EffectKey.ColorBlue]: 6,
-    [EffectKey.ColorMagenta]: 7,
-    [EffectKey.ColorCyan]: 8,
-    [EffectKey.ColorWhite]: 9,
-    [EffectKey.NormalColorAndWeight]: 1,
-    Default: 1,
+    [EffectKey.ColorDefault]: '__default__',
+    [EffectKey.NormalColorAndWeight]: '__default__',
+    Default: '__default__',
 } as const
 
 export const ColorModeEffect = {

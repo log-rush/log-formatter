@@ -66,7 +66,7 @@ describe('Parser Tests', () => {
             expect(targetNode.effect.weight).toBe(
                 TextWeightEffect[EffectKey.Faint],
             )
-            expect(targetNode.effect.italic).toBe(true)
+            expect(targetNode.effect.italic).toBe(1)
             expect(targetNode.effect.foreground).toBe('2')
             expect(targetNode.effect.foregroundMode).toBe(
                 ColorModeEffect[EffectKey.ColorMode8],
@@ -179,11 +179,11 @@ describe('Parser Tests', () => {
                 '',
             )
             const node2 = new SGRAstNode(
-                { ...EmptySGREffects, foreground: 'efg', italic: true },
+                { ...EmptySGREffects, foreground: 'efg', italic: 1 },
                 '',
             )
             const node3 = new SGRAstNode(
-                { ...EmptySGREffects, concealed: true },
+                { ...EmptySGREffects, concealed: 1 },
                 '',
             )
             const head = node1
@@ -196,12 +196,12 @@ describe('Parser Tests', () => {
             })
             expectNoUndefinedKey(node2.effect, {
                 foreground: 'efg',
-                italic: true,
+                italic: 1,
             })
             expectNoUndefinedKey(node3.effect, {
                 foreground: 'efg',
-                italic: true,
-                concealed: true,
+                italic: 1,
+                concealed: 1,
             })
         })
     })
