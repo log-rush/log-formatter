@@ -1,11 +1,13 @@
-import {
-    DefaultSGREffects,
-    EffectsMap,
-    EmptySGREffects,
-    SGREffect,
-} from './types'
+import { DefaultSGREffects, EmptySGREffects, SGREffect } from './types'
 
-export class SGRAstNode {
+export interface ReadOnlySGRAstNode {
+    readonly effect: SGREffect
+    readonly content: string
+    readonly nextNode: SGRAstNode | undefined
+    readonly previousNode: SGRAstNode | undefined
+}
+
+export class SGRAstNode implements ReadOnlySGRAstNode {
     readonly effect: SGREffect
 
     public content: string

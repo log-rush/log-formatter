@@ -1,5 +1,5 @@
-import { SGRAstNode } from '../parsing/ast'
+import { ReadOnlySGRAstNode } from '../parsing/ast'
 
 export interface SGROutputBuilder {
-    build(root: SGRAstNode): string
+    build(root: ReadOnlySGRAstNode): string
 }

@@ -1,8 +1,8 @@
-import { SGRAstNode } from '../parsing/ast'
+import { ReadOnlySGRAstNode } from '../parsing/ast'
 import { SGROutputBuilder } from './interface'
 
 export class HTMLNodeBuilder implements SGROutputBuilder {
-    build(root: SGRAstNode): string {
+    build(root: ReadOnlySGRAstNode): string {
         return ''
     }
 }
