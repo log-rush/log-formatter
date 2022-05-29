@@ -1,0 +1,56 @@
+.log > * {
+    background-color: var(--bg);
+    color: var(--fg);
+}
+
+.l-bs {
+    /* TODO: add blink animation */
+}
+
+.l-br {
+    /* TODO: add blink animation */
+}
+
+.l-cc {
+    position: relative;
+}
+
+.l-cc::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    z-index: 2;
+}
+
+.l-cr {
+    text-decoration: line-through;
+}
+
+.l-n {
+    filter: invert(1);
+}
+
+.l-i {
+    font-style: italic;
+}
+
+.l-u {
+    text-decoration: underline;
+}
+
+.l-du {
+    /* TODO:  do double underline */
+    text-decoration: underline;
+}
+
+.l-b {
+    font-weight: bold;
+}
+
+.l-f {
+    font-weight: lighter;
+}
