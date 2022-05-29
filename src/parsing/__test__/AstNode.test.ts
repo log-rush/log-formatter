@@ -69,4 +69,55 @@ describe('AST Node Test', () => {
         a.content = 'xxx'
         expect(a.content).not.toEqual(b.content)
     })
+
+    it('should set effect', () => {
+        const node = SGRAstNode.Default()
+        node.setEffect('foreground', 'abcd')
+        expect(node.effect.foreground).toEqual('abcd')
+    })
+
+    it('should set effects', () => {
+        const node = SGRAstNode.Default()
+        node.setEffects({
+            background: 'efg',
+            foreground: '123',
+        })
+        expect(node.effect.foreground).toEqual('123')
+        expect(node.effect.background).toEqual('efg')
+    })
+
+    it('should not set invalid effect kes', () => {
+        const node = SGRAstNode.Default()
+        // @ts-ignore
+        node.setEffect('x1', 'a')
+        node.setEffects({
+            // @ts-ignore
+            x2: 'a',
+            x3: 'a',
+        })
+        // @ts-ignore
+        expect(node.effect['x1']).toBeUndefined()
+        // @ts-ignore
+        expect(node.effect['x2']).toBeUndefined()
+        // @ts-ignore
+        expect(node.effect['x3']).toBeUndefined()
+    })
+
+    it('should set content', () => {
+        const node = SGRAstNode.Default()
+        node.setContent('1234')
+        expect(node.content).toEqual('1234')
+
+        node.setContent('abc')
+        expect(node.content).toEqual('abc')
+    })
+
+    it('should append content', () => {
+        const node = SGRAstNode.Default()
+        node.setContent('12')
+        node.appendContent('34')
+        expect(node.content).toEqual('1234')
+        node.appendContent('56')
+        expect(node.content).toEqual('123456')
+    })
 })

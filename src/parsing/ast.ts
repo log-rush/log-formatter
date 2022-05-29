@@ -30,7 +30,19 @@ export class SGRAstNode {
         key: K,
         value: SGREffect[K],
     ): SGRAstNode {
-        this.effect[key] = value
+        if (key in DefaultSGREffects) {
+            this.effect[key] = value
+        }
+        return this.clone()
+    }
+
+    setEffects(effects: Partial<SGREffect>): SGRAstNode {
+        for (const key of Object.keys(DefaultSGREffects)) {
+            if (key in effects) {
+                // @ts-ignore
+                this.effect[key] = effects[key]
+            }
+        }
         return this.clone()
     }
 

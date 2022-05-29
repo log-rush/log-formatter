@@ -1,7 +1,12 @@
 import { SGRAstNode } from './ast'
 import { CommandParserMap } from './commands'
 import { EFFECTS, TOKENS } from './effects'
-import { EmptySGREffects, SGREffect } from './types'
+import {
+    DefaultSGREffects,
+    EmptySGREffects,
+    PropertyOf,
+    SGREffect,
+} from './types'
 
 export const CTRL_CHARS = [
     '\x1b',
@@ -75,7 +80,7 @@ export class SGRCommandParser {
             ASTHead.insertAfter(finalNode)
             ASTHead = finalNode
         }
-
+        this.normalizeAst(ASTRoot)
         return ASTRoot
     }
 
@@ -114,5 +119,49 @@ export class SGRCommandParser {
             }
         }
         return node
+    }
+
+    //! this method *only* mutates references
+    normalizeAst(head: SGRAstNode): void {
+        let currentNode: SGRAstNode | undefined = head
+        let previousEffects = EmptySGREffects
+        while (currentNode !== undefined) {
+            const newEffects = this.mergeEffects(
+                previousEffects,
+                currentNode.effect,
+            )
+            const normalizedEffects = this.normalizeEffect(newEffects)
+            currentNode.setEffects(normalizedEffects)
+            previousEffects = normalizedEffects
+            currentNode = currentNode.nextNode
+        }
+    }
+
+    mergeEffects(
+        before: SGREffect | Partial<SGREffect>,
+        after: SGREffect | Partial<SGREffect>,
+    ): SGREffect {
+        const effects: SGREffect = {
+            ...EmptySGREffects,
+            ...before,
+        }
+        for (const [key, value] of Object.entries(after)) {
+            if (value !== undefined) {
+                // @ts-ignore
+                effects[key] = value
+            }
+        }
+        return effects
+    }
+
+    normalizeEffect(effect: SGREffect | Partial<SGREffect>): SGREffect {
+        const base = { ...DefaultSGREffects }
+        for (const [key, value] of Object.entries(effect)) {
+            if (value !== undefined) {
+                // @ts-ignore
+                base[key] = value
+            }
+        }
+        return base
     }
 }
