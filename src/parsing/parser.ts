@@ -1,7 +1,7 @@
 import { SGRAstNode } from './ast'
 import { CommandParserMap } from './commands'
-import { EffectKey, EFFECTS, TOKENS } from './effects'
-import { DefaultSGREffects, SGREffect } from './types'
+import { EFFECTS, TOKENS } from './effects'
+import { EmptySGREffects, SGREffect } from './types'
 
 export const CTRL_CHARS = [
     '\x1b',
@@ -70,7 +70,7 @@ export class SGRCommandParser {
         }
 
         if (pointer > contentStart) {
-            const finalNode = SGRAstNode.Default()
+            const finalNode = SGRAstNode.New()
             finalNode.setContent(data.substring(contentStart, pointer))
             ASTHead.insertAfter(finalNode)
             ASTHead = finalNode
@@ -80,7 +80,7 @@ export class SGRCommandParser {
     }
 
     parseSGRCommand(data: string): SGRAstNode | undefined {
-        const node = new SGRAstNode(DefaultSGREffects, '')
+        const node = new SGRAstNode(EmptySGREffects, '')
         let command = data
 
         while (command.length > 0) {

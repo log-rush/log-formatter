@@ -90,18 +90,32 @@ export const EffectsMap: {
 } as const
 
 export type SGREffect = {
-    // font: '' not supported
-    weight: PropertyOf<typeof TextWeightEffect>
-    italic: PropertyOf<typeof ItalicEffect>
-    underline: PropertyOf<typeof UnderlineEffect>
-    foregroundMode: PropertyOf<typeof ColorModeEffect>
-    foreground: PropertyOf<typeof ColorEffect> | string
-    backgroundMode: PropertyOf<typeof ColorModeEffect>
-    background: PropertyOf<typeof ColorEffect> | string
-    blink: PropertyOf<typeof BlinkEffect>
-    inverted: PropertyOf<typeof NegativeEffect>
-    crossedOut: PropertyOf<typeof CrossedOutEffect>
-    concealed: PropertyOf<typeof ConcealedEffect>
+    // font: '' / not supported
+    weight: PropertyOf<typeof TextWeightEffect> | undefined
+    italic: PropertyOf<typeof ItalicEffect> | undefined
+    underline: PropertyOf<typeof UnderlineEffect> | undefined
+    foregroundMode: PropertyOf<typeof ColorModeEffect> | undefined
+    foreground: PropertyOf<typeof ColorEffect> | string | undefined
+    backgroundMode: PropertyOf<typeof ColorModeEffect> | undefined
+    background: PropertyOf<typeof ColorEffect> | string | undefined
+    blink: PropertyOf<typeof BlinkEffect> | undefined
+    inverted: PropertyOf<typeof NegativeEffect> | undefined
+    crossedOut: PropertyOf<typeof CrossedOutEffect> | undefined
+    concealed: PropertyOf<typeof ConcealedEffect> | undefined
+}
+
+export const EmptySGREffects: SGREffect = {
+    weight: undefined,
+    italic: undefined,
+    underline: undefined,
+    foreground: undefined,
+    foregroundMode: undefined,
+    background: undefined,
+    backgroundMode: undefined,
+    blink: undefined,
+    inverted: undefined,
+    crossedOut: undefined,
+    concealed: undefined,
 }
 
 export const DefaultSGREffects: SGREffect = {

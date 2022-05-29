@@ -1,4 +1,9 @@
-import { DefaultSGREffects, EffectsMap, SGREffect } from './types'
+import {
+    DefaultSGREffects,
+    EffectsMap,
+    EmptySGREffects,
+    SGREffect,
+} from './types'
 
 export class SGRAstNode {
     readonly effect: SGREffect
@@ -70,6 +75,14 @@ export class SGRAstNode {
             },
             this.content,
         )
+    }
+
+    static New(): SGRAstNode {
+        return new SGRAstNode(EmptySGREffects, '')
+    }
+
+    New(): SGRAstNode {
+        return SGRAstNode.New()
     }
 
     static Default(): SGRAstNode {
