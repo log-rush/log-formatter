@@ -73,12 +73,23 @@ describe('Detect SGR Sequences', () => {
         expect(commandParser).toHaveBeenCalledTimes(2)
     })
 
-    it('should detect multiple commands of different types', () => {
+    it('should detect adjacent commands', () => {
         const command = '37;48;2;12;24;36'
-        const data = `\x1b[${command}m hello world \\e[${command}m \\u1b[${command}m \u001b${command}m`
+        const data = `\x1b[${command}m\x1b[${command}m`
         expect(commandParser).not.toBeCalled()
         parser.parse(data)
         expect(commandParser).toBeCalledWith(command)
+        expect(commandParser).toHaveBeenCalledTimes(2)
+    })
+
+    it('should detect multiple commands of different types', () => {
+        const commands = ['1;32', '3', '47;93', '5']
+        const data = `\x1b[${commands[0]}m hello world \\e[${commands[1]}m \\u1b[${commands[2]}m \u001b[${commands[3]}m`
+        expect(commandParser).not.toBeCalled()
+        parser.parse(data)
+        for (const args of commandParser.mock.calls as any[][]) {
+            expect(commands.some((c) => args.includes(c))).toBeTruthy()
+        }
         expect(commandParser).toHaveBeenCalledTimes(4)
     })
 })

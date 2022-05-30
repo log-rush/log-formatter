@@ -16,60 +16,40 @@ export const CTRL_CHARS = [
     '\\u001b',
     '\\u1b',
     '\\33',
-]
+] as const
 export const OPEN_BYTE = '['
 export const CLOSE_BYTE = 'm'
+const SGRCommandOpener = CTRL_CHARS.map((ctrl) => `${ctrl}${OPEN_BYTE}`)
 
 export class SGRCommandParser {
     parse(data: string): SGRAstNode {
         let pointer = 0
-        let startedSQRCommand = false
-        let startIndex = undefined
-        let endIndex = undefined
         let contentStart = 0
         let ASTRoot = SGRAstNode.Default()
         let ASTHead = ASTRoot
 
         while (pointer < data.length) {
-            const char = data[pointer]
-            for (const CtrlChar of CTRL_CHARS) {
-                if (
-                    CtrlChar.length === 1
-                        ? char === CtrlChar
-                        : CtrlChar ===
-                          data.slice(pointer, pointer + CtrlChar.length)
-                ) {
-                    // begin sequence
-                    startedSQRCommand = true
-                    ASTHead.appendContent(data.substring(contentStart, pointer))
-                    pointer += CtrlChar.length
-                    startIndex = pointer
-                    endIndex = undefined
-                    continue
-                }
-            }
-            if (startedSQRCommand) {
-                if (
-                    // end byte of sequence
-                    startIndex &&
-                    endIndex === undefined &&
-                    char === CLOSE_BYTE
-                ) {
-                    endIndex = pointer
-                    const node = this.parseSGRCommand(
-                        data.slice(startIndex + 1, endIndex),
-                    )
+            const isStart = this.isSGRCommandStart(data, pointer)
+            if (isStart.isValid) {
+                ASTHead.appendContent(data.substring(contentStart, pointer)) // store old content
+                pointer += isStart.commandOffset // move pointer after start byte
 
-                    if (node) {
-                        ASTHead.insertAfter(node)
-                        ASTHead = node
-                    }
-
-                    contentStart = pointer + 1
-                    startedSQRCommand = false
-                    startIndex = undefined
-                    endIndex = undefined
+                let commandLength = 0
+                while (data[pointer + commandLength] !== CLOSE_BYTE) {
+                    commandLength++
                 }
+
+                const node = this.parseSGRCommand(
+                    data.slice(pointer, pointer + commandLength),
+                )
+                pointer += commandLength + 1
+                contentStart = pointer
+
+                if (node) {
+                    ASTHead.insertAfter(node)
+                    ASTHead = node
+                }
+                continue
             }
             pointer++
         }
@@ -82,6 +62,27 @@ export class SGRCommandParser {
         }
         this.normalizeAst(ASTRoot)
         return ASTRoot
+    }
+
+    isSGRCommandStart(data: string, position: number) {
+        const char = data[position]
+        for (const openingSequence of SGRCommandOpener) {
+            if (
+                openingSequence.length === 1
+                    ? char === openingSequence
+                    : openingSequence ===
+                      data.slice(position, position + openingSequence.length)
+            ) {
+                return {
+                    isValid: true,
+                    commandOffset: openingSequence.length,
+                }
+            }
+        }
+        return {
+            isValid: false,
+            commandOffset: 0,
+        }
     }
 
     parseSGRCommand(data: string): SGRAstNode | undefined {
