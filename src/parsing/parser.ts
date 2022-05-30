@@ -1,12 +1,7 @@
 import { SGRAstNode } from './ast'
 import { CommandParserMap } from './commands'
-import { EFFECTS, TOKENS } from './effects'
-import {
-    DefaultSGREffects,
-    EmptySGREffects,
-    PropertyOf,
-    SGREffect,
-} from './types'
+import { EffectKey, EFFECTS, TOKENS } from './effects'
+import { DefaultSGREffects, EmptySGREffects, SGREffect } from './types'
 
 export const CTRL_CHARS = [
     '\x1b',
@@ -33,22 +28,23 @@ export class SGRCommandParser {
             if (isStart.isValid) {
                 ASTHead.appendContent(data.substring(contentStart, pointer)) // store old content
                 pointer += isStart.commandOffset // move pointer after start byte
-
-                let commandLength = 0
-                while (data[pointer + commandLength] !== CLOSE_BYTE) {
-                    commandLength++
+                // search for closing byte
+                let commandLength = data.substring(pointer).indexOf(CLOSE_BYTE)
+                if (commandLength < 0) {
+                    break
                 }
 
+                // parse command content (between opening sequence and closing byte)
                 const node = this.parseSGRCommand(
                     data.slice(pointer, pointer + commandLength),
                 )
+
+                // update current index + new content start
                 pointer += commandLength + 1
                 contentStart = pointer
 
-                if (node) {
-                    ASTHead.insertAfter(node)
-                    ASTHead = node
-                }
+                // insert new node
+                ASTHead = ASTHead.insertAfter(node)
                 continue
             }
             pointer++
@@ -57,9 +53,9 @@ export class SGRCommandParser {
         if (pointer > contentStart) {
             const finalNode = SGRAstNode.New()
             finalNode.setContent(data.substring(contentStart, pointer))
-            ASTHead.insertAfter(finalNode)
-            ASTHead = finalNode
+            ASTHead = ASTHead.insertAfter(finalNode)
         }
+
         this.normalizeAst(ASTRoot)
         return ASTRoot
     }
@@ -67,6 +63,7 @@ export class SGRCommandParser {
     isSGRCommandStart(data: string, position: number) {
         const char = data[position]
         for (const openingSequence of SGRCommandOpener) {
+            // search for variants of the escape character followed by an opening byte
             if (
                 openingSequence.length === 1
                     ? char === openingSequence
@@ -85,38 +82,49 @@ export class SGRCommandParser {
         }
     }
 
-    parseSGRCommand(data: string): SGRAstNode | undefined {
+    parseSGRCommand(data: string): SGRAstNode {
         const node = new SGRAstNode(EmptySGREffects, '')
         let command = data
 
+        // iterate incrementally over the command
         while (command.length > 0) {
             let hasFoundToken = false
 
             for (let i = 0; i < TOKENS.length; i++) {
+                // search for a token, that matches the current command
                 if (command.startsWith(EFFECTS[TOKENS[i].token])) {
                     const token = TOKENS[i].token
+                    // find a command parser for that matching token
                     const commandParser = CommandParserMap[token]
+                    if (!commandParser) break
 
-                    if (!commandParser) return undefined
+                    // execute the command
                     const result = commandParser(
                         command.slice(EFFECTS[token].length),
                     )
 
+                    // apply result, if command was successful
                     if (result.matches) {
                         hasFoundToken = true
                         command = result.remainingCommand
-                        for (const [key, value] of Object.entries(
-                            result.alteredEffects,
-                        )) {
-                            node.setEffect(key as keyof SGREffect, value)
-                        }
+                        node.setEffects({ ...result.alteredEffects })
                         break
                     }
                 }
             }
 
+            // it did not find a matching token or no token could successfully parse
             if (!hasFoundToken) {
-                return undefined
+                // check if there might be some valid commands remaining
+                const index = command.indexOf(EFFECTS[EffectKey.ChainCommand])
+                if (index >= 0) {
+                    // try again with probably still parsable content
+                    command = command.substring(
+                        index + EFFECTS[EffectKey.ChainCommand].length,
+                    )
+                } else {
+                    break
+                }
             }
         }
         return node
@@ -126,6 +134,7 @@ export class SGRCommandParser {
     normalizeAst(head: SGRAstNode): void {
         let currentNode: SGRAstNode | undefined = head
         let previousEffects = EmptySGREffects
+
         while (currentNode !== undefined) {
             const newEffects = this.mergeEffects(
                 previousEffects,

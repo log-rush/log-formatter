@@ -17,10 +17,13 @@ describe('AST Node Test', () => {
         const b = new SGRAstNode(createSGREffects(), 'b')
         const c = new SGRAstNode(createSGREffects(), 'c')
 
+        expect(a.previousNode).toBeUndefined()
         expect(a.nextNode).toBeUndefined()
         a.insertAfter(b)
+        expect(a.previousNode).toBeUndefined()
         expect(a.nextNode).toBe(b)
         expect(b.previousNode).toBe(a)
+        expect(b.nextNode).toBeUndefined()
 
         expect(b.nextNode).toBeUndefined()
         b.insertAfter(c)

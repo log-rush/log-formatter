@@ -1,3 +1,4 @@
+import { SGRAstNode } from '../ast'
 import { SGRCommandParser } from '../parser'
 
 describe('Detect SGR Sequences', () => {
@@ -5,7 +6,7 @@ describe('Detect SGR Sequences', () => {
     let commandParser: jest.Mock
 
     beforeEach(() => {
-        commandParser = jest.fn()
+        commandParser = jest.fn().mockImplementation(() => SGRAstNode.New())
         parser.parseSGRCommand = commandParser
     })
 
@@ -49,24 +50,22 @@ describe('Detect SGR Sequences', () => {
         const data4 = `\\u001b[${command}m`
         expect(commandParser).not.toBeCalled()
         parser.parse(data1)
-        expect(commandParser).toBeCalledWith(command)
-        commandParser.mockReset()
-        expect(commandParser).not.toBeCalled()
+        expect(commandParser.mock.calls[0][0]).toEqual(command)
+        expect(commandParser).toBeCalledTimes(1)
         parser.parse(data2)
-        expect(commandParser).toBeCalledWith(command)
-        commandParser.mockReset()
-        expect(commandParser).not.toBeCalled()
+        expect(commandParser.mock.calls[1][0]).toEqual(command)
+        expect(commandParser).toBeCalledTimes(2)
         parser.parse(data3)
-        expect(commandParser).toBeCalledWith(command)
-        commandParser.mockReset()
-        expect(commandParser).not.toBeCalled()
+        expect(commandParser.mock.calls[2][0]).toEqual(command)
+        expect(commandParser).toBeCalledTimes(3)
         parser.parse(data4)
-        expect(commandParser).toBeCalledWith(command)
+        expect(commandParser.mock.calls[3][0]).toEqual(command)
+        expect(commandParser).toBeCalledTimes(4)
     })
 
     it('should detect multiple commands', () => {
         const command = '37;48;2;12;24;36'
-        const data = `\x1b[${command}m hello world \x1b[${command}m`
+        const data = `\x1b[${command}m hello world \x1b[${command};1m`
         expect(commandParser).not.toBeCalled()
         parser.parse(data)
         expect(commandParser).toBeCalledWith(command)
@@ -91,5 +90,20 @@ describe('Detect SGR Sequences', () => {
             expect(commands.some((c) => args.includes(c))).toBeTruthy()
         }
         expect(commandParser).toHaveBeenCalledTimes(4)
+    })
+
+    it('should not match whiteout opening byte ', () => {
+        const data = `\x1b31m`
+        expect(commandParser).not.toBeCalled()
+        parser.parse(data)
+        expect(commandParser).not.toBeCalled()
+    })
+
+    it('should close after closing byte regardless of content', () => {
+        const data = `\x1b[31 Hello Worldm`
+        expect(commandParser).not.toBeCalled()
+        parser.parse(data)
+        expect(commandParser).toBeCalledTimes(1)
+        expect(commandParser).toBeCalledWith('31 Hello World')
     })
 })

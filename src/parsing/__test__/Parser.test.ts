@@ -5,6 +5,7 @@ import {
     ColorModeEffect,
     DefaultSGREffects,
     EmptySGREffects,
+    ItalicEffect,
     SGREffect,
     TextWeightEffect,
 } from '../types'
@@ -78,16 +79,44 @@ describe('Parser Tests', () => {
         }
     })
 
-    it('should skip erroneous commands', () => {
-        const ast = parser.parse('\x1b[1mHello \x1b[xm World\x1b[0m')
-        const targetNode = ast.nextNode
+    describe('error handling', () => {
+        it('should skip erroneous commands', () => {
+            const ast = parser.parse('\x1b[1mHello \x1b[xm World\x1b[0m')
+            const targetNode = ast.nextNode
 
-        expect(ast.content).toBe('')
-        if (expectNode(targetNode)) {
-            expect(targetNode.content).toBe('Hello  World')
-            expect(targetNode.nextNode?.content).toBe('')
-            expect(targetNode.nextNode?.nextNode).toBeUndefined()
-        }
+            expect(ast.content).toBe('')
+            if (expectNode(targetNode)) {
+                expect(targetNode.content).toBe('Hello ')
+                expect(targetNode.nextNode?.content).toBe(' World')
+            }
+        })
+
+        it('should process commands incremental, keeping content until errors', () => {
+            const ast = parser.parse('\x1b[1;3;xxxm')
+            const target = ast.nextNode
+            if (expectNode(target)) {
+                expect(target.effect.weight).toBe(
+                    TextWeightEffect[EffectKey.Bold],
+                )
+                expect(target.effect.italic).toBe(
+                    ItalicEffect[EffectKey.Italic],
+                )
+            }
+        })
+
+        it('should recover inside commands', () => {
+            const ast = parser.parse('\x1b[3;xxx;1m')
+            //                         invalid part^   ^still valid
+            const target = ast.nextNode
+            if (expectNode(target)) {
+                expect(target.effect.weight).toBe(
+                    TextWeightEffect[EffectKey.Bold],
+                )
+                expect(target.effect.italic).toBe(
+                    ItalicEffect[EffectKey.Italic],
+                )
+            }
+        })
     })
 
     it('should process empty commands', () => {

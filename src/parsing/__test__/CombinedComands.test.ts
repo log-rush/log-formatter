@@ -1,7 +1,12 @@
 import { SGRAstNode } from '../ast'
 import { EffectKey } from '../effects'
 import { SGRCommandParser } from '../parser'
-import { ColorModeEffect, NegativeEffect, UnderlineEffect } from '../types'
+import {
+    ColorModeEffect,
+    EmptySGREffects,
+    NegativeEffect,
+    UnderlineEffect,
+} from '../types'
 
 const expectNode = (node: SGRAstNode | undefined): node is SGRAstNode => {
     expect(node).toBeDefined()
@@ -71,15 +76,18 @@ describe('Combined Command Parsing Tests', () => {
     it('should catch invalid commands', () => {
         expect(() => {
             const node = parserFunc('xxx')
-            expect(node).toBeUndefined()
+            expect(node?.effect).toEqual(EmptySGREffects)
         }).not.toThrow()
         expect(() => {
             const node = parserFunc('31;x')
-            expect(node).toBeUndefined()
+            expect(node?.effect.foreground).toEqual('1')
+            expect(node?.effect.foregroundMode).toEqual(
+                ColorModeEffect[EffectKey.ColorMode8],
+            )
         }).not.toThrow()
         expect(() => {
             const node = parserFunc('512')
-            expect(node).toBeUndefined()
+            expect(node?.effect).toEqual(EmptySGREffects)
         }).not.toThrow()
     })
 })
