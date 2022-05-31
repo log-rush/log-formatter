@@ -1,4 +1,4 @@
-import { FormatterMap, LogFormat, LogFormatter } from '../formatter'
+import { FormatterMap, LogFormat, LogFormatBuilder } from '../formatter'
 
 describe('LogFormatter Tests', () => {
     const htmlBuilder = jest.fn()
@@ -22,11 +22,11 @@ describe('LogFormatter Tests', () => {
         expect(htmlBuilder).not.toBeCalled()
         expect(textBuilder).not.toBeCalled()
 
-        LogFormatter.format('', LogFormat.ColoredHtml)
+        LogFormatBuilder.format('', LogFormat.ColoredHtml)
         expect(htmlBuilder).toBeCalledTimes(1)
         expect(textBuilder).not.toBeCalled()
 
-        LogFormatter.format('', LogFormat.RawText)
+        LogFormatBuilder.format('', LogFormat.RawText)
         expect(htmlBuilder).toBeCalledTimes(1)
         expect(textBuilder).toBeCalledTimes(1)
     })
