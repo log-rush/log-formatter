@@ -1,5 +1,4 @@
 import { ReadOnlySGRAstNode } from '../parsing/ast'
-import { EffectKey } from '../parsing/effects'
 import {
     BlinkEffect,
     ColorEffect,
@@ -8,13 +7,14 @@ import {
     CrossedOutEffect,
     ItalicEffect,
     NegativeEffect,
-    SGREffect,
     TextWeightEffect,
     UnderlineEffect,
-} from '../parsing/types'
+    EffectKey,
+} from '../parsing/effects'
 import { EffectsMap } from '../parsing/index'
 import { SGROutputBuilder } from './interface'
 import { ColorMode8Colors } from '../colors/colorDefinitions8'
+import { SGREffect } from '../parsing/types'
 
 const classMap: Record<keyof typeof EffectsMap, Record<string, string>> = {
     foreground: {},

@@ -6,10 +6,10 @@ import {
     CrossedOutEffect,
     ItalicEffect,
     NegativeEffect,
-    SGREffect,
     TextWeightEffect,
     UnderlineEffect,
-} from '../types'
+} from '../effects'
+import { SGREffect } from '../types'
 
 export const createSGREffects = ({
     weight,

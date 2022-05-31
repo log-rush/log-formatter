@@ -1,19 +1,19 @@
-import { Color256, Color8, EffectKey, EFFECTS } from './effects'
-import { SGRAstNode } from './ast'
 import {
+    Color256,
+    Color8,
+    EffectKey,
+    EFFECTS,
     BlinkEffect,
     ColorEffect,
     ColorModeEffect,
     ConcealedEffect,
     CrossedOutEffect,
-    DefaultSGREffects,
     ItalicEffect,
     NegativeEffect,
-    PropertyOf,
-    SGREffect,
     TextWeightEffect,
     UnderlineEffect,
-} from './types'
+} from './effects'
+import { DefaultSGREffects, PropertyOf, SGREffect } from './types'
 
 export type FailedCommandResult = {
     matches: false

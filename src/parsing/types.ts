@@ -1,4 +1,16 @@
-import { EffectKey } from './effects'
+import {
+    BlinkEffect,
+    ColorEffect,
+    ColorModeEffect,
+    ConcealedEffect,
+    CrossedOutEffect,
+    EffectKey,
+    EffectsMap,
+    ItalicEffect,
+    NegativeEffect,
+    TextWeightEffect,
+    UnderlineEffect,
+} from './effects'
 
 export type DefaultAble<T> = {
     [key: string]: T
@@ -6,80 +18,6 @@ export type DefaultAble<T> = {
 }
 
 export type PropertyOf<T> = T[keyof T]
-
-export const TextWeightEffect = {
-    [EffectKey.NormalColorAndWeight]: 1,
-    [EffectKey.Bold]: 2,
-    [EffectKey.Faint]: 3,
-    Default: 1,
-} as const
-
-export const ItalicEffect = {
-    [EffectKey.Italic]: 1,
-    [EffectKey.NotItalic]: 2,
-    Default: 2,
-} as const
-
-export const UnderlineEffect = {
-    [EffectKey.NotUnderlined]: 1,
-    [EffectKey.Underline]: 2,
-    [EffectKey.DoublyUnderlined]: 3,
-    Default: 1,
-} as const
-
-export const NegativeEffect = {
-    [EffectKey.NegativeImage]: 1,
-    [EffectKey.PositiveImage]: 2,
-    Default: 2,
-} as const
-
-export const ConcealedEffect = {
-    [EffectKey.ConcealedCharacters]: 1,
-    [EffectKey.RevealedCharacters]: 2,
-    Default: 2,
-} as const
-
-export const CrossedOutEffect = {
-    [EffectKey.CrossedOut]: 1,
-    [EffectKey.NotCrossedOut]: 2,
-    Default: 2,
-} as const
-
-export const BlinkEffect = {
-    [EffectKey.Steady]: 1,
-    [EffectKey.BlinkSlow]: 2,
-    [EffectKey.BlinkRapid]: 3,
-    Default: 1,
-} as const
-
-export const ColorEffect = {
-    [EffectKey.ColorDefault]: '__default__',
-    [EffectKey.NormalColorAndWeight]: '__default__',
-    Default: '__default__',
-} as const
-
-export const ColorModeEffect = {
-    [EffectKey.ColorMode8]: 1,
-    [EffectKey.ColorMode256]: 2,
-    [EffectKey.ColorModeRGB]: 3,
-    Default: 1,
-} as const
-
-export const EffectsMap: {
-    [K in keyof SGREffect]: DefaultAble<SGREffect[K]>
-} = {
-    weight: TextWeightEffect,
-    italic: ItalicEffect,
-    underline: UnderlineEffect,
-    foregroundMode: ColorModeEffect,
-    foreground: ColorEffect,
-    backgroundMode: ColorModeEffect,
-    background: ColorEffect,
-    blink: BlinkEffect,
-    inverted: NegativeEffect,
-    crossedOut: CrossedOutEffect,
-    concealed: ConcealedEffect,
-} as const
 
 export type SGREffect = {
     // font: '' / not supported

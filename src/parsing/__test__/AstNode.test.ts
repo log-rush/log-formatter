@@ -1,6 +1,5 @@
 import { SGRAstNode } from '../ast'
-import { EffectKey } from '../effects'
-import { BlinkEffect } from '../types'
+import { BlinkEffect, EffectKey } from '../effects'
 import { createSGREffects } from './testUtil'
 
 describe('AST Node Test', () => {

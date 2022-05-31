@@ -1,23 +1,21 @@
-import { SGRAstNode } from '../ast'
 import {
     CommandParserMap,
     CommandResult,
     SuccessCommandResult,
 } from '../commands'
-import { EffectKey } from '../effects'
 import {
     BlinkEffect,
     ColorEffect,
     ColorModeEffect,
     ConcealedEffect,
     CrossedOutEffect,
-    DefaultSGREffects,
+    EffectKey,
     ItalicEffect,
     NegativeEffect,
-    SGREffect,
     TextWeightEffect,
     UnderlineEffect,
-} from '../types'
+} from '../effects'
+import { DefaultSGREffects, SGREffect } from '../types'
 
 const expectMatch = (result: CommandResult): result is SuccessCommandResult => {
     expect(result.matches).toBeTruthy()

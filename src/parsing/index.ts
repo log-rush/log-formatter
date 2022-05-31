@@ -1,7 +1,6 @@
 export * from './parser'
 export * from './ast'
 export {
-    SGREffect,
     BlinkEffect,
     ColorEffect,
     ColorModeEffect,
@@ -12,4 +11,6 @@ export {
     NegativeEffect,
     TextWeightEffect,
     UnderlineEffect,
-} from './types'
+    EffectKey,
+} from './effects'
+export { DefaultSGREffects, EmptySGREffects, SGREffect } from './types'
