@@ -1,4 +1,4 @@
-import { SGRAstNode } from './ast'
+import { SGRAstNode, WriteableSGRAstNode } from './ast'
 import { CommandParserMap } from './commands'
 import { EffectKey, EFFECTS, TOKENS } from './effects'
 import { DefaultSGREffects, EmptySGREffects, SGREffect } from './types'
@@ -131,8 +131,8 @@ export class SGRCommandParser {
     }
 
     //! this method *only* mutates references
-    normalizeAst(head: SGRAstNode): void {
-        let currentNode: SGRAstNode | undefined = head
+    normalizeAst(head: WriteableSGRAstNode): void {
+        let currentNode: WriteableSGRAstNode | undefined = head
         let previousEffects = EmptySGREffects
 
         while (currentNode !== undefined) {

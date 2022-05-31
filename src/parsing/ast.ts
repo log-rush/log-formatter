@@ -7,7 +7,20 @@ export interface ReadOnlySGRAstNode {
     readonly previousNode: SGRAstNode | undefined
 }
 
-export class SGRAstNode implements ReadOnlySGRAstNode {
+export interface WriteableSGRAstNode extends ReadOnlySGRAstNode {
+    setEffect<K extends keyof SGREffect>(
+        key: K,
+        value: SGREffect[K],
+    ): SGRAstNode
+    setEffects(effects: Partial<SGREffect>): SGRAstNode
+    setContent(value: string): SGRAstNode
+    appendContent(value: string): SGRAstNode
+    insertBefore(node: SGRAstNode): SGRAstNode
+    insertAfter(node: SGRAstNode): SGRAstNode
+    clone(): SGRAstNode
+}
+
+export class SGRAstNode implements WriteableSGRAstNode {
     readonly effect: SGREffect
 
     public content: string
@@ -58,7 +71,7 @@ export class SGRAstNode implements ReadOnlySGRAstNode {
         return this.clone()
     }
 
-    insertBefore(node: SGRAstNode) {
+    insertBefore(node: SGRAstNode): SGRAstNode {
         node.nextNode = this
         node.previousNode = this.previousNode
         this.previousNode = node
