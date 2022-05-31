@@ -15,17 +15,29 @@ import {
 } from './effects'
 import { DefaultSGREffects, PropertyOf, SGREffect } from './types'
 
+/**
+ * @internal
+ */
 export type FailedCommandResult = {
     matches: false
 }
+
+/**
+ * @internal
+ */
 export type SuccessCommandResult = {
     matches: true
     alteredEffects: Partial<SGREffect>
     remainingCommand: string
 }
 
+/**
+ * @internal
+ */
 export type CommandResult = FailedCommandResult | SuccessCommandResult
-
+/**
+ * @internal
+ */
 export type ParserFunc = (remainingCommand: string) => CommandResult
 
 const applyEffect =
@@ -105,6 +117,9 @@ export type ColorResult = {
 
 const ChainCommandCharacter = EFFECTS[EffectKey.ChainCommand]
 
+/**
+ * @internal
+ */
 export const parseColor = (
     command: string,
 ): (ColorResult & { mode: PropertyOf<typeof ColorModeEffect> }) | undefined => {
@@ -141,6 +156,9 @@ export const parseColor = (
     return undefined
 }
 
+/**
+ * @internal
+ */
 export const parseRGBColor = (command: string): ColorResult | undefined => {
     const amountsOfChainCharacters = command
         .split('')
@@ -162,6 +180,9 @@ export const parseRGBColor = (command: string): ColorResult | undefined => {
     }
 }
 
+/**
+ * @internal
+ */
 export const parse256Color = (command: string): ColorResult | undefined => {
     if (command.length < 4 && Color256.some((color) => color === command)) {
         return {
@@ -180,6 +201,9 @@ export const parse256Color = (command: string): ColorResult | undefined => {
     }
 }
 
+/**
+ * @internal
+ */
 export const parse8Color = (command: string): ColorResult | undefined => {
     if (
         command.length === 1 &&
@@ -202,6 +226,9 @@ export const parse8Color = (command: string): ColorResult | undefined => {
     return undefined
 }
 
+/**
+ * @internal
+ */
 export const CommandParserMap: Record<string, ParserFunc> = {
     [EffectKey.Reset]: (command) => {
         if (command.startsWith(ChainCommandCharacter) || command.length === 0) {

@@ -1,16 +1,25 @@
 import { DefaultAble, SGREffect } from './types'
 
+/**
+ * @internal
+ */
 export type Token = {
     token: EffectKey
     precedence: number
 }
 
+/**
+ * @internal
+ */
 export const EffectPrecedence = {
     Low: 1,
     Medium: 2,
     High: 3,
 } as const
 
+/**
+ * @internal
+ */
 export enum EffectKey {
     Reset,
     Bold,
@@ -49,6 +58,9 @@ export enum EffectKey {
     ChainCommand,
 }
 
+/**
+ * @internal
+ */
 export const EFFECTS = {
     [EffectKey.Reset]: '0',
     // Font Modifier

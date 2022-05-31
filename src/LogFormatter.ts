@@ -12,7 +12,12 @@ export enum Optimization {
     O2,
 }
 
-export class LogFormatter {
+export type Options<F extends LogFormat> = {
+    optimizations?: Optimization
+    format: F
+}
+
+export class LogFormatter<F extends LogFormat> {
     static format<F extends LogFormat>(
         logs: string,
         format: F,
@@ -29,5 +34,24 @@ export class LogFormatter {
         }
 
         return LogFormatBuilder.formatRaw(ast, format)
+    }
+
+    private parser: SGRCommandParser
+
+    constructor(private readonly options: Options<F>) {
+        this.parser = new SGRCommandParser()
+    }
+
+    format(logs: string): FormattingType[F] {
+        const ast = this.parser.parse(logs)
+
+        if (this.options.optimizations === Optimization.O1) {
+            Optimize1(ast)
+        } else if (this.options.optimizations === Optimization.O2) {
+            Optimize1(ast)
+            Optimize2(ast)
+        }
+
+        return LogFormatBuilder.formatRaw(ast, this.options.format)
     }
 }

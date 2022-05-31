@@ -60,7 +60,7 @@ export class SGRCommandParser {
         return ASTRoot
     }
 
-    isSGRCommandStart(data: string, position: number) {
+    private isSGRCommandStart(data: string, position: number) {
         const char = data[position]
         for (const openingSequence of SGRCommandOpener) {
             // search for variants of the escape character followed by an opening byte
@@ -130,7 +130,10 @@ export class SGRCommandParser {
         return node
     }
 
-    //! this method *only* mutates references
+    /**
+     * ! this method *only* mutates references
+     * @internal
+     */
     normalizeAst(head: WriteableSGRAstNode): void {
         let currentNode: WriteableSGRAstNode | undefined = head
         let previousEffects = EmptySGREffects
@@ -147,6 +150,9 @@ export class SGRCommandParser {
         }
     }
 
+    /**
+     * @internal
+     */
     mergeEffects(
         before: SGREffect | Partial<SGREffect>,
         after: SGREffect | Partial<SGREffect>,
@@ -164,6 +170,9 @@ export class SGRCommandParser {
         return effects
     }
 
+    /**
+     * @internal
+     */
     normalizeEffect(effect: SGREffect | Partial<SGREffect>): SGREffect {
         const base = { ...DefaultSGREffects }
         for (const [key, value] of Object.entries(effect)) {
@@ -175,6 +184,9 @@ export class SGRCommandParser {
         return base
     }
 
+    /**
+     * @internal
+     */
     removeDefaultsFromEffect(
         effect: SGREffect | Partial<SGREffect>,
     ): SGREffect {

@@ -5,7 +5,6 @@ import {
     ColorModeEffect,
     ConcealedEffect,
     CrossedOutEffect,
-    EffectKey,
     EffectsMap,
     ItalicEffect,
     NegativeEffect,
@@ -13,11 +12,17 @@ import {
     UnderlineEffect,
 } from './effects'
 
+/**
+ * @internal
+ */
 export type DefaultAble<T> = {
     [key: string]: T
     Default: T
 }
 
+/**
+ * @internal
+ */
 export type PropertyOf<T> = T[keyof T]
 
 export type SGREffect = {
@@ -63,4 +68,7 @@ export const DefaultSGREffects: SGREffect = {
     concealed: EffectsMap.concealed.Default,
 }
 
+/**
+ * @internal
+ */
 export type ASTTransformer = (head: WriteableSGRAstNode) => void

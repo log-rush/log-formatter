@@ -1,23 +1,22 @@
 {
     "name": "test-logdisplay",
     "version": "1.0.0",
-    "main": "index.js",
+    "module": "dist/esm/index.js",
+    "main": "dist/cjs/index.js",
     "author": "fabiankachlock <fabian.kachlock@icloud.com>",
     "license": "MIT",
     "scripts": {
-        "build": "webpack",
-        "typecheck": "tsc --noEmit",
+        "build": "rm -rf dist && yarn build:browser && yarn build:node",
+        "build:browser": "tsc -p ./tsconfig.browser.json",
+        "build:node": "tsc -p ./tsconfig.node.json",
         "test": "jest",
-        "test:watch": "jest --watch"
+        "test:watch": "jest --watch",
+        "test:coverage": "jest --coverage"
     },
     "devDependencies": {
         "@types/jest": "^27.5.1",
         "jest": "^28.1.0",
         "ts-jest": "^28.0.3",
-        "ts-loader": "^9.3.0",
-        "ts-node": "^10.8.0",
-        "typescript": "^4.7.2",
-        "webpack": "^5.72.1",
-        "webpack-cli": "^4.9.2"
+        "typescript": "^4.7.2"
     }
 }

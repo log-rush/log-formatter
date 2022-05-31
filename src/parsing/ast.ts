@@ -1,5 +1,8 @@
 import { DefaultSGREffects, EmptySGREffects, SGREffect } from './types'
 
+/**
+ * @internal
+ */
 export interface ReadOnlySGRAstNode {
     readonly effect: SGREffect
     readonly content: string
@@ -7,6 +10,9 @@ export interface ReadOnlySGRAstNode {
     readonly previousNode: SGRAstNode | undefined
 }
 
+/**
+ * @internal
+ */
 export interface WriteableSGRAstNode extends ReadOnlySGRAstNode {
     setEffect<K extends keyof SGREffect>(
         key: K,
@@ -22,6 +28,9 @@ export interface WriteableSGRAstNode extends ReadOnlySGRAstNode {
     clone(): SGRAstNode
 }
 
+/**
+ * @internal
+ */
 export class SGRAstNode implements WriteableSGRAstNode {
     readonly effect: SGREffect
 
