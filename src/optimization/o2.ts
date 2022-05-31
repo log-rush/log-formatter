@@ -13,7 +13,7 @@ export const Optimize2: ASTTransformer = (head: WriteableSGRAstNode) => {
         ) {
             const removedNode = node.removeAfter()
             if (removedNode) {
-                node.setContent(removedNode.content + node.content)
+                node.appendContent(removedNode.content)
             }
         }
         node = node.nextNode

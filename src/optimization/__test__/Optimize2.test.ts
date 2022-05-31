@@ -21,7 +21,7 @@ describe('Optimize 2 Tests', () => {
         expect(b.previousNode).toBeUndefined()
     })
 
-    it.skip('should not remove content from deleted nodes', () => {
+    it('should not remove content from deleted nodes', () => {
         const a = new SGRAstNode(createSGREffects(), 'a')
         const b = new SGRAstNode(createSGREffects({ foreground: 'abc' }), 'b')
         const c = new SGRAstNode(createSGREffects({ foreground: 'abc' }), 'c')
