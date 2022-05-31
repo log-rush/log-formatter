@@ -182,6 +182,23 @@ describe('Parser Tests', () => {
         expect(result2.foreground).toEqual('abc')
     })
 
+    it('should remove defaults from sgr effect', () => {
+        const extracted1 = parser.removeDefaultsFromEffect(DefaultSGREffects)
+        expect(extracted1).toEqual(EmptySGREffects)
+        const extracted2 = parser.removeDefaultsFromEffect({
+            ...DefaultSGREffects,
+            foreground: 'xxx',
+        })
+        for (const key of Object.keys(extracted2)) {
+            if (key === 'foreground') {
+                expect(extracted2[key]).toEqual('xxx')
+            } else {
+                // @ts-ignore
+                expect(extracted2[key]).toBeUndefined()
+            }
+        }
+    })
+
     describe('ast normalization', () => {
         it('should normalize ast node effects', () => {
             const node = SGRAstNode.New()

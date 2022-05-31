@@ -16,7 +16,9 @@ export interface WriteableSGRAstNode extends ReadOnlySGRAstNode {
     setContent(value: string): SGRAstNode
     appendContent(value: string): SGRAstNode
     insertBefore(node: SGRAstNode): SGRAstNode
+    removeBefore(): SGRAstNode | undefined
     insertAfter(node: SGRAstNode): SGRAstNode
+    removeAfter(): SGRAstNode | undefined
     clone(): SGRAstNode
 }
 
@@ -83,6 +85,26 @@ export class SGRAstNode implements WriteableSGRAstNode {
         node.nextNode = this.nextNode
         this.nextNode = node
         return node
+    }
+
+    removeBefore(): SGRAstNode | undefined {
+        const removed = this.previousNode
+        const temp = this.previousNode?.previousNode
+        this.previousNode = temp
+        if (this.previousNode) {
+            this.previousNode.nextNode = this
+        }
+        return removed
+    }
+
+    removeAfter(): SGRAstNode | undefined {
+        const removed = this.nextNode
+        const temp = this.nextNode?.nextNode
+        this.nextNode = temp
+        if (this.nextNode) {
+            this.nextNode.previousNode = this
+        }
+        return removed
     }
 
     clone(): SGRAstNode {

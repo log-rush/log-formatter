@@ -1,3 +1,4 @@
+import { WriteableSGRAstNode } from './ast'
 import {
     BlinkEffect,
     ColorEffect,
@@ -61,3 +62,5 @@ export const DefaultSGREffects: SGREffect = {
     crossedOut: EffectsMap.crossedOut.Default,
     concealed: EffectsMap.concealed.Default,
 }
+
+export type ASTTransformer = (head: WriteableSGRAstNode) => void

@@ -174,4 +174,18 @@ export class SGRCommandParser {
         }
         return base
     }
+
+    removeDefaultsFromEffect(
+        effect: SGREffect | Partial<SGREffect>,
+    ): SGREffect {
+        const base = { ...EmptySGREffects }
+        for (const [key, value] of Object.entries(effect)) {
+            // @ts-ignore
+            if (value !== undefined && value !== DefaultSGREffects[key]) {
+                // @ts-ignore
+                base[key] = value
+            }
+        }
+        return base
+    }
 }

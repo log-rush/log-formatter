@@ -37,6 +37,22 @@ describe('AST Node Test', () => {
         expect(a1.nextNode).toBe(b)
     })
 
+    it('should remove after', () => {
+        const a = new SGRAstNode(createSGREffects(), 'a')
+        const b = new SGRAstNode(createSGREffects(), 'b')
+        const c = new SGRAstNode(createSGREffects(), 'c')
+
+        a.insertAfter(b)
+        b.insertAfter(c)
+
+        expect(a.nextNode).toBe(b)
+        expect(c.previousNode).toBe(b)
+
+        expect(a.removeAfter()).toBe(b)
+        expect(a.nextNode).toBe(c)
+        expect(c.previousNode).toBe(a)
+    })
+
     it('should insert node before', () => {
         const a = new SGRAstNode(createSGREffects(), 'a')
         const b = new SGRAstNode(createSGREffects(), 'b')
@@ -58,6 +74,22 @@ describe('AST Node Test', () => {
         a.insertBefore(a1)
         expect(a1.nextNode).toBe(a)
         expect(a1.previousNode).toBe(b)
+    })
+
+    it('should remove before', () => {
+        const a = new SGRAstNode(createSGREffects(), 'a')
+        const b = new SGRAstNode(createSGREffects(), 'b')
+        const c = new SGRAstNode(createSGREffects(), 'c')
+
+        a.insertAfter(b)
+        b.insertAfter(c)
+
+        expect(a.nextNode).toBe(b)
+        expect(c.previousNode).toBe(b)
+
+        expect(c.removeBefore()).toBe(b)
+        expect(a.nextNode).toBe(c)
+        expect(c.previousNode).toBe(a)
     })
 
     it('should clone deep', () => {
