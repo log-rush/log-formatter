@@ -94,6 +94,10 @@ export class SGRAstNode implements WriteableSGRAstNode {
         if (this.previousNode) {
             this.previousNode.nextNode = this
         }
+        if (removed) {
+            removed.nextNode = undefined
+            removed.previousNode = undefined
+        }
         return removed
     }
 
@@ -103,6 +107,10 @@ export class SGRAstNode implements WriteableSGRAstNode {
         this.nextNode = temp
         if (this.nextNode) {
             this.nextNode.previousNode = this
+        }
+        if (removed) {
+            removed.nextNode = undefined
+            removed.previousNode = undefined
         }
         return removed
     }
