@@ -1,12 +1,12 @@
 {
     "name": "test-logdisplay",
-    "version": "1.0.0",
+    "version": "0.0.0",
     "module": "dist/esm/index.js",
     "main": "dist/cjs/index.js",
     "author": "fabiankachlock <fabian.kachlock@icloud.com>",
     "license": "MIT",
     "scripts": {
-        "build": "rm -rf dist && yarn build:browser && yarn build:node",
+        "build": "yarn zx ./scripts/build.mjs",
         "build:browser": "tsc -p ./tsconfig.browser.json",
         "build:node": "tsc -p ./tsconfig.node.json",
         "test": "jest",
@@ -20,6 +20,7 @@
         "jest": "^28.1.0",
         "prettier": "^2.6.2",
         "ts-jest": "^28.0.3",
-        "typescript": "^4.7.2"
+        "typescript": "^4.7.2",
+        "zx": "^6.1.0"
     }
 }
