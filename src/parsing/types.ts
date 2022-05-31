@@ -40,6 +40,9 @@ export type SGREffect = {
     concealed: PropertyOf<typeof ConcealedEffect> | undefined
 }
 
+/**
+ * @internal
+ */
 export const EmptySGREffects: SGREffect = {
     weight: undefined,
     italic: undefined,
@@ -54,6 +57,9 @@ export const EmptySGREffects: SGREffect = {
     concealed: undefined,
 }
 
+/**
+ * @internal
+ */
 export const DefaultSGREffects: SGREffect = {
     weight: EffectsMap.weight.Default,
     italic: EffectsMap.italic.Default,

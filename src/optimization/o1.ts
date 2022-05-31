@@ -1,7 +1,8 @@
-import { WriteableSGRAstNode } from '../parsing/ast'
-import { SGRCommandParser } from '../parsing/parser'
-import { ASTTransformer } from '../parsing/types'
+import { SGRCommandParser, WriteableSGRAstNode, ASTTransformer } from '../parsing'
 
+/**
+ * @internal
+ */
 export const Optimize1: ASTTransformer = (head: WriteableSGRAstNode) => {
     const parser = new SGRCommandParser()
     let node: WriteableSGRAstNode | undefined = head

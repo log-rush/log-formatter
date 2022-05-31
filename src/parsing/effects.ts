@@ -123,6 +123,9 @@ export const EFFECTS = {
     [EffectKey.ChainCommand]: ';',
 } as const
 
+/**
+ * @internal
+ */
 export const TOKENS: Token[] = [
     ...[
         EffectKey.ColorMode8,
@@ -167,6 +170,9 @@ export const TOKENS: Token[] = [
     ].map(token => ({ token, precedence: EffectPrecedence.High })),
 ].reverse()
 
+/**
+ * @internal
+ */
 export const Color8 = [
     EffectKey.ColorBlack,
     EffectKey.ColorRed,
@@ -179,8 +185,14 @@ export const Color8 = [
     EffectKey.ColorDefault,
 ]
 
+/**
+ * @internal
+ */
 export const Color256 = new Array(256).fill(0).map((_, i) => i.toString())
 
+/**
+ * @internal
+ */
 export const TextWeightEffect = {
     [EffectKey.NormalColorAndWeight]: 1,
     [EffectKey.Bold]: 2,
@@ -188,12 +200,18 @@ export const TextWeightEffect = {
     Default: 1,
 } as const
 
+/**
+ * @internal
+ */
 export const ItalicEffect = {
     [EffectKey.Italic]: 1,
     [EffectKey.NotItalic]: 2,
     Default: 2,
 } as const
 
+/**
+ * @internal
+ */
 export const UnderlineEffect = {
     [EffectKey.NotUnderlined]: 1,
     [EffectKey.Underline]: 2,
@@ -201,24 +219,36 @@ export const UnderlineEffect = {
     Default: 1,
 } as const
 
+/**
+ * @internal
+ */
 export const NegativeEffect = {
     [EffectKey.NegativeImage]: 1,
     [EffectKey.PositiveImage]: 2,
     Default: 2,
 } as const
 
+/**
+ * @internal
+ */
 export const ConcealedEffect = {
     [EffectKey.ConcealedCharacters]: 1,
     [EffectKey.RevealedCharacters]: 2,
     Default: 2,
 } as const
 
+/**
+ * @internal
+ */
 export const CrossedOutEffect = {
     [EffectKey.CrossedOut]: 1,
     [EffectKey.NotCrossedOut]: 2,
     Default: 2,
 } as const
 
+/**
+ * @internal
+ */
 export const BlinkEffect = {
     [EffectKey.Steady]: 1,
     [EffectKey.BlinkSlow]: 2,
@@ -226,12 +256,18 @@ export const BlinkEffect = {
     Default: 1,
 } as const
 
+/**
+ * @internal
+ */
 export const ColorEffect = {
     [EffectKey.ColorDefault]: '__default__',
     [EffectKey.NormalColorAndWeight]: '__default__',
     Default: '__default__',
 } as const
 
+/**
+ * @internal
+ */
 export const ColorModeEffect = {
     [EffectKey.ColorMode8]: 1,
     [EffectKey.ColorMode256]: 2,
@@ -239,6 +275,9 @@ export const ColorModeEffect = {
     Default: 1,
 } as const
 
+/**
+ * @internal
+ */
 export const EffectsMap: {
     [K in keyof SGREffect]: DefaultAble<SGREffect[K]>
 } = {

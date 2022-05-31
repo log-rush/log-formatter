@@ -15,7 +15,11 @@ import { EffectsMap } from '../parsing/index'
 import { SGROutputBuilder } from './interface'
 import { ColorMode8Colors } from '../colors/colorDefinitions8'
 import { SGREffect } from '../parsing/types'
+import { ColorMode256Colors } from '../colors'
 
+/**
+ * @internal
+ */
 const classMap: Record<keyof typeof EffectsMap, Record<string, string>> = {
     foreground: {},
     background: {},

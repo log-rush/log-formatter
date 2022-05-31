@@ -1,2 +1,4 @@
 export * from './LogFormatter'
-export * from './parsing'
+export { SGRCommandParser, WriteableSGRAstNode, ReadOnlySGRAstNode, SGRAstNode, SGREffect } from './parsing'
+export * from './colors'
+export * from './builder'

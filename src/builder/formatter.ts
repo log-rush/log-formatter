@@ -11,6 +11,9 @@ export enum LogFormat {
     AttributesArray,
 }
 
+/**
+ * @internal
+ */
 export const FormatterMap: Record<LogFormat, SGROutputBuilder<unknown>> = {
     [LogFormat.ColoredHtml]: new HTMLNodeBuilder(),
     [LogFormat.RawText]: new RawTextBuilder(),

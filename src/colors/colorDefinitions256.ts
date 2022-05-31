@@ -1,4 +1,4 @@
-const ColorMode256Colors = {
+export const ColorMode256Colors = {
     0: '#000000',
     1: '#800000',
     2: '#008000',

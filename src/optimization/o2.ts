@@ -1,6 +1,8 @@
-import { WriteableSGRAstNode } from '../parsing/ast'
-import { ASTTransformer } from '../parsing/types'
+import { WriteableSGRAstNode, ASTTransformer } from '../parsing'
 
+/**
+ * @internal
+ */
 export const Optimize2: ASTTransformer = (head: WriteableSGRAstNode) => {
     let node: WriteableSGRAstNode | undefined = head
     while (node !== undefined) {
