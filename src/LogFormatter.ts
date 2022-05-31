@@ -1,8 +1,4 @@
-import {
-    FormattingType,
-    LogFormat,
-    LogFormatBuilder,
-} from './builder/formatter'
+import { FormattingType, LogFormat, LogFormatBuilder } from './builder/formatter'
 import { Optimize1 } from './optimization/o1'
 import { Optimize2 } from './optimization/o2'
 import { SGRCommandParser } from './parsing/parser'
@@ -18,11 +14,7 @@ export type Options<F extends LogFormat> = {
 }
 
 export class LogFormatter<F extends LogFormat> {
-    static format<F extends LogFormat>(
-        logs: string,
-        format: F,
-        optimization?: Optimization,
-    ): FormattingType[F] {
+    static format<F extends LogFormat>(logs: string, format: F, optimization?: Optimization): FormattingType[F] {
         const parser = new SGRCommandParser()
         const ast = parser.parse(logs)
 

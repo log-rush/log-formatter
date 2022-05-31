@@ -14,10 +14,7 @@ export interface ReadOnlySGRAstNode {
  * @internal
  */
 export interface WriteableSGRAstNode extends ReadOnlySGRAstNode {
-    setEffect<K extends keyof SGREffect>(
-        key: K,
-        value: SGREffect[K],
-    ): SGRAstNode
+    setEffect<K extends keyof SGREffect>(key: K, value: SGREffect[K]): SGRAstNode
     setEffects(effects: Partial<SGREffect>): SGRAstNode
     setContent(value: string): SGRAstNode
     appendContent(value: string): SGRAstNode
@@ -40,22 +37,14 @@ export class SGRAstNode implements WriteableSGRAstNode {
 
     public previousNode: SGRAstNode | undefined
 
-    constructor(
-        effect: SGREffect,
-        content: string,
-        next?: SGRAstNode,
-        previous?: SGRAstNode,
-    ) {
+    constructor(effect: SGREffect, content: string, next?: SGRAstNode, previous?: SGRAstNode) {
         this.effect = { ...effect }
         this.content = content
         this.nextNode = next
         this.previousNode = previous
     }
 
-    setEffect<K extends keyof SGREffect>(
-        key: K,
-        value: SGREffect[K],
-    ): SGRAstNode {
+    setEffect<K extends keyof SGREffect>(key: K, value: SGREffect[K]): SGRAstNode {
         if (key in DefaultSGREffects) {
             this.effect[key] = value
         }

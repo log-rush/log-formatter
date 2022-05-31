@@ -1,12 +1,7 @@
 import { SGRAstNode } from '../ast'
 import { SGRCommandParser } from '../parser'
 import { DefaultSGREffects, EmptySGREffects, SGREffect } from '../types'
-import {
-    ColorModeEffect,
-    ItalicEffect,
-    TextWeightEffect,
-    EffectKey,
-} from '../effects'
+import { ColorModeEffect, ItalicEffect, TextWeightEffect, EffectKey } from '../effects'
 
 const expectNode = (node: SGRAstNode | undefined): node is SGRAstNode => {
     expect(node).toBeDefined()
@@ -43,15 +38,11 @@ describe('Parser Tests', () => {
         expect(ast.content).toBe('')
         if (expectNode(targetNode)) {
             expect(targetNode.content).toBe('Hello World')
-            expect(targetNode.effect.weight).toBe(
-                TextWeightEffect[EffectKey.Bold],
-            )
+            expect(targetNode.effect.weight).toBe(TextWeightEffect[EffectKey.Bold])
             if (expectNode(targetNode?.nextNode)) {
                 expect(targetNode.nextNode?.nextNode).toBeUndefined()
                 expect(targetNode.nextNode?.content).toBe('')
-                expect(targetNode.nextNode?.effect?.weight).toBe(
-                    TextWeightEffect.Default,
-                )
+                expect(targetNode.nextNode?.effect?.weight).toBe(TextWeightEffect.Default)
             }
         }
     })
@@ -62,18 +53,12 @@ describe('Parser Tests', () => {
         expect(ast.content).toBe('')
         if (expectNode(targetNode)) {
             expect(targetNode.content).toBe('Hello World')
-            expect(targetNode.effect.weight).toBe(
-                TextWeightEffect[EffectKey.Faint],
-            )
+            expect(targetNode.effect.weight).toBe(TextWeightEffect[EffectKey.Faint])
             expect(targetNode.effect.italic).toBe(1)
             expect(targetNode.effect.foreground).toBe('2')
-            expect(targetNode.effect.foregroundMode).toBe(
-                ColorModeEffect[EffectKey.ColorMode8],
-            )
+            expect(targetNode.effect.foregroundMode).toBe(ColorModeEffect[EffectKey.ColorMode8])
             expect(targetNode.effect.background).toBe('#000000')
-            expect(targetNode.effect.backgroundMode).toBe(
-                ColorModeEffect[EffectKey.ColorModeRGB],
-            )
+            expect(targetNode.effect.backgroundMode).toBe(ColorModeEffect[EffectKey.ColorModeRGB])
         }
     })
 
@@ -93,12 +78,8 @@ describe('Parser Tests', () => {
             const ast = parser.parse('\x1b[1;3;xxxm')
             const target = ast.nextNode
             if (expectNode(target)) {
-                expect(target.effect.weight).toBe(
-                    TextWeightEffect[EffectKey.Bold],
-                )
-                expect(target.effect.italic).toBe(
-                    ItalicEffect[EffectKey.Italic],
-                )
+                expect(target.effect.weight).toBe(TextWeightEffect[EffectKey.Bold])
+                expect(target.effect.italic).toBe(ItalicEffect[EffectKey.Italic])
             }
         })
 
@@ -107,12 +88,8 @@ describe('Parser Tests', () => {
             //                         invalid part^   ^still valid
             const target = ast.nextNode
             if (expectNode(target)) {
-                expect(target.effect.weight).toBe(
-                    TextWeightEffect[EffectKey.Bold],
-                )
-                expect(target.effect.italic).toBe(
-                    ItalicEffect[EffectKey.Italic],
-                )
+                expect(target.effect.weight).toBe(TextWeightEffect[EffectKey.Bold])
+                expect(target.effect.italic).toBe(ItalicEffect[EffectKey.Italic])
             }
         })
     })
@@ -208,28 +185,16 @@ describe('Parser Tests', () => {
         })
 
         it('should not override effects', () => {
-            const node = new SGRAstNode(
-                { ...EmptySGREffects, foreground: 'abc' },
-                '',
-            )
+            const node = new SGRAstNode({ ...EmptySGREffects, foreground: 'abc' }, '')
             parser.normalizeAst(node)
             expectNoUndefinedKey(node.effect)
             expect(node.effect.foreground).toEqual('abc')
         })
 
         it('should recurse over all nodes and incrementally apply effects', () => {
-            const node1 = new SGRAstNode(
-                { ...EmptySGREffects, foreground: 'abc' },
-                '',
-            )
-            const node2 = new SGRAstNode(
-                { ...EmptySGREffects, foreground: 'efg', italic: 1 },
-                '',
-            )
-            const node3 = new SGRAstNode(
-                { ...EmptySGREffects, concealed: 1 },
-                '',
-            )
+            const node1 = new SGRAstNode({ ...EmptySGREffects, foreground: 'abc' }, '')
+            const node2 = new SGRAstNode({ ...EmptySGREffects, foreground: 'efg', italic: 1 }, '')
+            const node3 = new SGRAstNode({ ...EmptySGREffects, concealed: 1 }, '')
             const head = node1
             node1.insertAfter(node2)
             node2.insertAfter(node3)

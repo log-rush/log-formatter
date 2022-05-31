@@ -87,7 +87,7 @@ describe('Detect SGR Sequences', () => {
         expect(commandParser).not.toBeCalled()
         parser.parse(data)
         for (const args of commandParser.mock.calls as any[][]) {
-            expect(commands.some((c) => args.includes(c))).toBeTruthy()
+            expect(commands.some(c => args.includes(c))).toBeTruthy()
         }
         expect(commandParser).toHaveBeenCalledTimes(4)
     })

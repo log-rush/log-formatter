@@ -1,11 +1,6 @@
 import { SGRAstNode } from '../ast'
 import { SGRCommandParser } from '../parser'
-import {
-    ColorModeEffect,
-    NegativeEffect,
-    UnderlineEffect,
-    EffectKey,
-} from '../effects'
+import { ColorModeEffect, NegativeEffect, UnderlineEffect, EffectKey } from '../effects'
 import { EmptySGREffects } from '../types'
 
 const expectNode = (node: SGRAstNode | undefined): node is SGRAstNode => {
@@ -25,31 +20,23 @@ describe('Combined Command Parsing Tests', () => {
         const node1 = parserFunc('31')
         if (expectNode(node1)) {
             expect(node1.effect.foreground).toEqual('1')
-            expect(node1.effect.foregroundMode).toEqual(
-                ColorModeEffect[EffectKey.ColorMode8],
-            )
+            expect(node1.effect.foregroundMode).toEqual(ColorModeEffect[EffectKey.ColorMode8])
         }
 
         const node2 = parserFunc('48;5;192')
         if (expectNode(node2)) {
             expect(node2.effect.background).toEqual('192')
-            expect(node2.effect.backgroundMode).toEqual(
-                ColorModeEffect[EffectKey.ColorMode256],
-            )
+            expect(node2.effect.backgroundMode).toEqual(ColorModeEffect[EffectKey.ColorMode256])
         }
 
         const node3 = parserFunc('4')
         if (expectNode(node3)) {
-            expect(node3.effect.underline).toEqual(
-                UnderlineEffect[EffectKey.Underline],
-            )
+            expect(node3.effect.underline).toEqual(UnderlineEffect[EffectKey.Underline])
         }
 
         const node4 = parserFunc('7')
         if (expectNode(node4)) {
-            expect(node4.effect.inverted).toEqual(
-                NegativeEffect[EffectKey.NegativeImage],
-            )
+            expect(node4.effect.inverted).toEqual(NegativeEffect[EffectKey.NegativeImage])
         }
     })
 
@@ -57,19 +44,11 @@ describe('Combined Command Parsing Tests', () => {
         const node = parserFunc('31;48;5;192;4;7')
         if (expectNode(node)) {
             expect(node.effect.foreground).toEqual('1')
-            expect(node.effect.foregroundMode).toEqual(
-                ColorModeEffect[EffectKey.ColorMode8],
-            )
+            expect(node.effect.foregroundMode).toEqual(ColorModeEffect[EffectKey.ColorMode8])
             expect(node.effect.background).toEqual('192')
-            expect(node.effect.backgroundMode).toEqual(
-                ColorModeEffect[EffectKey.ColorMode256],
-            )
-            expect(node.effect.underline).toEqual(
-                UnderlineEffect[EffectKey.Underline],
-            )
-            expect(node.effect.inverted).toEqual(
-                NegativeEffect[EffectKey.NegativeImage],
-            )
+            expect(node.effect.backgroundMode).toEqual(ColorModeEffect[EffectKey.ColorMode256])
+            expect(node.effect.underline).toEqual(UnderlineEffect[EffectKey.Underline])
+            expect(node.effect.inverted).toEqual(NegativeEffect[EffectKey.NegativeImage])
         }
     })
 
@@ -81,9 +60,7 @@ describe('Combined Command Parsing Tests', () => {
         expect(() => {
             const node = parserFunc('31;x')
             expect(node?.effect.foreground).toEqual('1')
-            expect(node?.effect.foregroundMode).toEqual(
-                ColorModeEffect[EffectKey.ColorMode8],
-            )
+            expect(node?.effect.foregroundMode).toEqual(ColorModeEffect[EffectKey.ColorMode8])
         }).not.toThrow()
         expect(() => {
             const node = parserFunc('512')

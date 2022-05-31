@@ -3,18 +3,10 @@ import { CommandParserMap } from './commands'
 import { EffectKey, EFFECTS, TOKENS } from './effects'
 import { DefaultSGREffects, EmptySGREffects, SGREffect } from './types'
 
-export const CTRL_CHARS = [
-    '\x1b',
-    '\\e',
-    '\\x1b',
-    '\\033',
-    '\\u001b',
-    '\\u1b',
-    '\\33',
-] as const
+export const CTRL_CHARS = ['\x1b', '\\e', '\\x1b', '\\033', '\\u001b', '\\u1b', '\\33'] as const
 export const OPEN_BYTE = '['
 export const CLOSE_BYTE = 'm'
-const SGRCommandOpener = CTRL_CHARS.map((ctrl) => `${ctrl}${OPEN_BYTE}`)
+const SGRCommandOpener = CTRL_CHARS.map(ctrl => `${ctrl}${OPEN_BYTE}`)
 
 export class SGRCommandParser {
     parse(data: string): SGRAstNode {
@@ -35,9 +27,7 @@ export class SGRCommandParser {
                 }
 
                 // parse command content (between opening sequence and closing byte)
-                const node = this.parseSGRCommand(
-                    data.slice(pointer, pointer + commandLength),
-                )
+                const node = this.parseSGRCommand(data.slice(pointer, pointer + commandLength))
 
                 // update current index + new content start
                 pointer += commandLength + 1
@@ -67,8 +57,7 @@ export class SGRCommandParser {
             if (
                 openingSequence.length === 1
                     ? char === openingSequence
-                    : openingSequence ===
-                      data.slice(position, position + openingSequence.length)
+                    : openingSequence === data.slice(position, position + openingSequence.length)
             ) {
                 return {
                     isValid: true,
@@ -99,9 +88,7 @@ export class SGRCommandParser {
                     if (!commandParser) break
 
                     // execute the command
-                    const result = commandParser(
-                        command.slice(EFFECTS[token].length),
-                    )
+                    const result = commandParser(command.slice(EFFECTS[token].length))
 
                     // apply result, if command was successful
                     if (result.matches) {
@@ -119,9 +106,7 @@ export class SGRCommandParser {
                 const index = command.indexOf(EFFECTS[EffectKey.ChainCommand])
                 if (index >= 0) {
                     // try again with probably still parsable content
-                    command = command.substring(
-                        index + EFFECTS[EffectKey.ChainCommand].length,
-                    )
+                    command = command.substring(index + EFFECTS[EffectKey.ChainCommand].length)
                 } else {
                     break
                 }
@@ -139,10 +124,7 @@ export class SGRCommandParser {
         let previousEffects = EmptySGREffects
 
         while (currentNode !== undefined) {
-            const newEffects = this.mergeEffects(
-                previousEffects,
-                currentNode.effect,
-            )
+            const newEffects = this.mergeEffects(previousEffects, currentNode.effect)
             const normalizedEffects = this.normalizeEffect(newEffects)
             currentNode.setEffects(normalizedEffects)
             previousEffects = normalizedEffects
@@ -153,10 +135,7 @@ export class SGRCommandParser {
     /**
      * @internal
      */
-    mergeEffects(
-        before: SGREffect | Partial<SGREffect>,
-        after: SGREffect | Partial<SGREffect>,
-    ): SGREffect {
+    mergeEffects(before: SGREffect | Partial<SGREffect>, after: SGREffect | Partial<SGREffect>): SGREffect {
         const effects: SGREffect = {
             ...EmptySGREffects,
             ...before,
@@ -187,9 +166,7 @@ export class SGRCommandParser {
     /**
      * @internal
      */
-    removeDefaultsFromEffect(
-        effect: SGREffect | Partial<SGREffect>,
-    ): SGREffect {
+    removeDefaultsFromEffect(effect: SGREffect | Partial<SGREffect>): SGREffect {
         const base = { ...EmptySGREffects }
         for (const [key, value] of Object.entries(effect)) {
             // @ts-ignore

@@ -42,7 +42,7 @@ export type ParserFunc = (remainingCommand: string) => CommandResult
 
 const applyEffect =
     <K extends keyof SGREffect>(key: K, value: SGREffect[K]): ParserFunc =>
-    (command) => {
+    command => {
         if (command.startsWith(ChainCommandCharacter) || command.length === 0) {
             return {
                 matches: true,
@@ -59,7 +59,7 @@ const applyEffect =
 
 const setEffects =
     (effects: Partial<SGREffect>): ParserFunc =>
-    (command) => {
+    command => {
         if (command.startsWith(ChainCommandCharacter) || command.length === 0) {
             return {
                 matches: true,
@@ -83,7 +83,7 @@ const setEffectsSetter =
               }
             | undefined,
     ): ParserFunc =>
-    (command) => {
+    command => {
         const result = valueSetter(command)
         if (result) {
             return {
@@ -97,18 +97,17 @@ const setEffectsSetter =
         return { matches: false }
     }
 
-const createParseColorResultMapper =
-    (type: 'foreground' | 'background') => (command: string) => {
-        const result = parseColor(command)
-        if (!result) return undefined
-        return {
-            effects: {
-                [type]: result.color,
-                [`${type}Mode`]: result.mode,
-            },
-            remaining: result.remaining,
-        }
+const createParseColorResultMapper = (type: 'foreground' | 'background') => (command: string) => {
+    const result = parseColor(command)
+    if (!result) return undefined
+    return {
+        effects: {
+            [type]: result.color,
+            [`${type}Mode`]: result.mode,
+        },
+        remaining: result.remaining,
     }
+}
 
 export type ColorResult = {
     color: string
@@ -124,9 +123,7 @@ export const parseColor = (
     command: string,
 ): (ColorResult & { mode: PropertyOf<typeof ColorModeEffect> }) | undefined => {
     if (command.startsWith(EFFECTS[EffectKey.ColorModeRGB])) {
-        const result = parseRGBColor(
-            command.slice(EFFECTS[EffectKey.ColorModeRGB].length),
-        )
+        const result = parseRGBColor(command.slice(EFFECTS[EffectKey.ColorModeRGB].length))
         if (!result) return undefined
         return {
             ...result,
@@ -134,9 +131,7 @@ export const parseColor = (
         }
     }
     if (command.startsWith(EFFECTS[EffectKey.ColorMode256])) {
-        const result = parse256Color(
-            command.slice(EFFECTS[EffectKey.ColorMode256].length),
-        )
+        const result = parse256Color(command.slice(EFFECTS[EffectKey.ColorMode256].length))
         if (!result) return undefined
         return {
             ...result,
@@ -144,9 +139,7 @@ export const parseColor = (
         }
     }
     if (command.startsWith(EFFECTS[EffectKey.ColorMode8])) {
-        const result = parse8Color(
-            command.slice(EFFECTS[EffectKey.ColorMode8].length),
-        )
+        const result = parse8Color(command.slice(EFFECTS[EffectKey.ColorMode8].length))
         if (!result) return undefined
         return {
             ...result,
@@ -160,19 +153,17 @@ export const parseColor = (
  * @internal
  */
 export const parseRGBColor = (command: string): ColorResult | undefined => {
-    const amountsOfChainCharacters = command
-        .split('')
-        .reduce((sum, char) => sum + +(char === ChainCommandCharacter), 0)
+    const amountsOfChainCharacters = command.split('').reduce((sum, char) => sum + +(char === ChainCommandCharacter), 0)
 
     if (amountsOfChainCharacters >= 2) {
         const [r, g, b, ...rest] = command.split(ChainCommandCharacter)
-        const [numR, numG, numB] = [r, g, b].map((str) => parseInt(str, 10))
+        const [numR, numG, numB] = [r, g, b].map(str => parseInt(str, 10))
         if ([numR, numG, numB].some(isNaN)) return undefined
-        if ([numR, numG, numB].some((num) => num > 255)) return undefined
+        if ([numR, numG, numB].some(num => num > 255)) return undefined
         return {
-            color: `#${numR.toString(16).padStart(2, '0')}${numG
+            color: `#${numR.toString(16).padStart(2, '0')}${numG.toString(16).padStart(2, '0')}${numB
                 .toString(16)
-                .padStart(2, '0')}${numB.toString(16).padStart(2, '0')}`,
+                .padStart(2, '0')}`,
             remaining: rest.join(ChainCommandCharacter),
         }
     } else {
@@ -184,7 +175,7 @@ export const parseRGBColor = (command: string): ColorResult | undefined => {
  * @internal
  */
 export const parse256Color = (command: string): ColorResult | undefined => {
-    if (command.length < 4 && Color256.some((color) => color === command)) {
+    if (command.length < 4 && Color256.some(color => color === command)) {
         return {
             color: command,
             remaining: '',
@@ -205,10 +196,7 @@ export const parse256Color = (command: string): ColorResult | undefined => {
  * @internal
  */
 export const parse8Color = (command: string): ColorResult | undefined => {
-    if (
-        command.length === 1 &&
-        Color8.some((color) => command === EFFECTS[color])
-    ) {
+    if (command.length === 1 && Color8.some(color => command === EFFECTS[color])) {
         return {
             color: command,
             remaining: '',
@@ -230,7 +218,7 @@ export const parse8Color = (command: string): ColorResult | undefined => {
  * @internal
  */
 export const CommandParserMap: Record<string, ParserFunc> = {
-    [EffectKey.Reset]: (command) => {
+    [EffectKey.Reset]: command => {
         if (command.startsWith(ChainCommandCharacter) || command.length === 0) {
             return {
                 matches: true,
@@ -245,34 +233,13 @@ export const CommandParserMap: Record<string, ParserFunc> = {
     [EffectKey.Bold]: applyEffect('weight', TextWeightEffect[EffectKey.Bold]),
     [EffectKey.Faint]: applyEffect('weight', TextWeightEffect[EffectKey.Faint]),
     [EffectKey.Italic]: applyEffect('italic', ItalicEffect[EffectKey.Italic]),
-    [EffectKey.Underline]: applyEffect(
-        'underline',
-        UnderlineEffect[EffectKey.Underline],
-    ),
-    [EffectKey.BlinkSlow]: applyEffect(
-        'blink',
-        BlinkEffect[EffectKey.BlinkSlow],
-    ),
-    [EffectKey.BlinkRapid]: applyEffect(
-        'blink',
-        BlinkEffect[EffectKey.BlinkRapid],
-    ),
-    [EffectKey.NegativeImage]: applyEffect(
-        'inverted',
-        NegativeEffect[EffectKey.NegativeImage],
-    ),
-    [EffectKey.ConcealedCharacters]: applyEffect(
-        'concealed',
-        ConcealedEffect[EffectKey.ConcealedCharacters],
-    ),
-    [EffectKey.CrossedOut]: applyEffect(
-        'crossedOut',
-        CrossedOutEffect[EffectKey.CrossedOut],
-    ),
-    [EffectKey.DoublyUnderlined]: applyEffect(
-        'underline',
-        UnderlineEffect[EffectKey.DoublyUnderlined],
-    ),
+    [EffectKey.Underline]: applyEffect('underline', UnderlineEffect[EffectKey.Underline]),
+    [EffectKey.BlinkSlow]: applyEffect('blink', BlinkEffect[EffectKey.BlinkSlow]),
+    [EffectKey.BlinkRapid]: applyEffect('blink', BlinkEffect[EffectKey.BlinkRapid]),
+    [EffectKey.NegativeImage]: applyEffect('inverted', NegativeEffect[EffectKey.NegativeImage]),
+    [EffectKey.ConcealedCharacters]: applyEffect('concealed', ConcealedEffect[EffectKey.ConcealedCharacters]),
+    [EffectKey.CrossedOut]: applyEffect('crossedOut', CrossedOutEffect[EffectKey.CrossedOut]),
+    [EffectKey.DoublyUnderlined]: applyEffect('underline', UnderlineEffect[EffectKey.DoublyUnderlined]),
     [EffectKey.NormalColorAndWeight]: setEffects({
         weight: TextWeightEffect.Default,
         foreground: ColorEffect.Default,
@@ -280,37 +247,14 @@ export const CommandParserMap: Record<string, ParserFunc> = {
         foregroundMode: ColorModeEffect.Default,
         backgroundMode: ColorModeEffect.Default,
     }),
-    [EffectKey.NotItalic]: applyEffect(
-        'italic',
-        ItalicEffect[EffectKey.NotItalic],
-    ),
-    [EffectKey.NotUnderlined]: applyEffect(
-        'underline',
-        UnderlineEffect[EffectKey.NotUnderlined],
-    ),
+    [EffectKey.NotItalic]: applyEffect('italic', ItalicEffect[EffectKey.NotItalic]),
+    [EffectKey.NotUnderlined]: applyEffect('underline', UnderlineEffect[EffectKey.NotUnderlined]),
     [EffectKey.Steady]: applyEffect('blink', BlinkEffect[EffectKey.Steady]),
-    [EffectKey.PositiveImage]: applyEffect(
-        'inverted',
-        NegativeEffect[EffectKey.PositiveImage],
-    ),
-    [EffectKey.RevealedCharacters]: applyEffect(
-        'concealed',
-        ConcealedEffect[EffectKey.RevealedCharacters],
-    ),
-    [EffectKey.NotCrossedOut]: applyEffect(
-        'crossedOut',
-        CrossedOutEffect[EffectKey.NotCrossedOut],
-    ),
-    [EffectKey.Foreground]: setEffectsSetter(
-        createParseColorResultMapper('foreground'),
-    ),
-    [EffectKey.BrightForeground]: setEffectsSetter(
-        createParseColorResultMapper('foreground'),
-    ),
-    [EffectKey.Background]: setEffectsSetter(
-        createParseColorResultMapper('background'),
-    ),
-    [EffectKey.BrightBackground]: setEffectsSetter(
-        createParseColorResultMapper('background'),
-    ),
+    [EffectKey.PositiveImage]: applyEffect('inverted', NegativeEffect[EffectKey.PositiveImage]),
+    [EffectKey.RevealedCharacters]: applyEffect('concealed', ConcealedEffect[EffectKey.RevealedCharacters]),
+    [EffectKey.NotCrossedOut]: applyEffect('crossedOut', CrossedOutEffect[EffectKey.NotCrossedOut]),
+    [EffectKey.Foreground]: setEffectsSetter(createParseColorResultMapper('foreground')),
+    [EffectKey.BrightForeground]: setEffectsSetter(createParseColorResultMapper('foreground')),
+    [EffectKey.Background]: setEffectsSetter(createParseColorResultMapper('background')),
+    [EffectKey.BrightBackground]: setEffectsSetter(createParseColorResultMapper('background')),
 }

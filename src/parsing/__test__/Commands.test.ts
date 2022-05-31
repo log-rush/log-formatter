@@ -1,8 +1,4 @@
-import {
-    CommandParserMap,
-    CommandResult,
-    SuccessCommandResult,
-} from '../commands'
+import { CommandParserMap, CommandResult, SuccessCommandResult } from '../commands'
 import {
     BlinkEffect,
     ColorEffect,
@@ -21,11 +17,7 @@ const expectMatch = (result: CommandResult): result is SuccessCommandResult => {
     expect(result.matches).toBeTruthy()
     return result.matches
 }
-const expectKey = <
-    T extends Record<string, V>,
-    K extends keyof T | string = keyof T,
-    V = unknown,
->(
+const expectKey = <T extends Record<string, V>, K extends keyof T | string = keyof T, V = unknown>(
     object: T,
     key: K,
     value?: T[keyof T] | V,
@@ -37,11 +29,7 @@ const expectKey = <
 }
 
 const createApplyCommandTestSuite =
-    (
-        command: typeof CommandParserMap[keyof typeof CommandParserMap],
-        expectedEffects: Partial<SGREffect>,
-    ) =>
-    () => {
+    (command: typeof CommandParserMap[keyof typeof CommandParserMap], expectedEffects: Partial<SGREffect>) => () => {
         it('should apply effects', () => {
             const result = command('')
             if (expectMatch(result)) {
@@ -65,11 +53,7 @@ const createApplyCommandTestSuite =
     }
 
 const createApplyColorTestSuite =
-    (
-        command: typeof CommandParserMap[keyof typeof CommandParserMap],
-        type: 'foreground' | 'background',
-    ) =>
-    () => {
+    (command: typeof CommandParserMap[keyof typeof CommandParserMap], type: 'foreground' | 'background') => () => {
         it('should apply effects', () => {
             const tests = [
                 {
@@ -96,11 +80,7 @@ const createApplyColorTestSuite =
             for (const testCase of tests) {
                 const result = command(testCase.input)
                 if (expectMatch(result)) {
-                    expectKey<Partial<SGREffect>, keyof Partial<SGREffect>>(
-                        result.alteredEffects,
-                        type,
-                        testCase.color,
-                    )
+                    expectKey<Partial<SGREffect>, keyof Partial<SGREffect>>(result.alteredEffects, type, testCase.color)
                     expectKey<Partial<SGREffect>, keyof Partial<SGREffect>>(
                         result.alteredEffects,
                         `${type}Mode`,
@@ -215,10 +195,9 @@ describe('Command Tests', () => {
 
     describe(
         'ConcealedCharacters',
-        createApplyCommandTestSuite(
-            CommandParserMap[EffectKey.ConcealedCharacters],
-            { concealed: ConcealedEffect[EffectKey.ConcealedCharacters] },
-        ),
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.ConcealedCharacters], {
+            concealed: ConcealedEffect[EffectKey.ConcealedCharacters],
+        }),
     )
 
     describe(
@@ -230,24 +209,20 @@ describe('Command Tests', () => {
 
     describe(
         'DoublyUnderlined',
-        createApplyCommandTestSuite(
-            CommandParserMap[EffectKey.DoublyUnderlined],
-            { underline: UnderlineEffect[EffectKey.DoublyUnderlined] },
-        ),
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.DoublyUnderlined], {
+            underline: UnderlineEffect[EffectKey.DoublyUnderlined],
+        }),
     )
 
     describe(
         'NormalColorAndWeight',
-        createApplyCommandTestSuite(
-            CommandParserMap[EffectKey.NormalColorAndWeight],
-            {
-                weight: TextWeightEffect.Default,
-                foreground: ColorEffect.Default,
-                background: ColorEffect.Default,
-                foregroundMode: ColorModeEffect.Default,
-                backgroundMode: ColorModeEffect.Default,
-            },
-        ),
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.NormalColorAndWeight], {
+            weight: TextWeightEffect.Default,
+            foreground: ColorEffect.Default,
+            background: ColorEffect.Default,
+            foregroundMode: ColorModeEffect.Default,
+            backgroundMode: ColorModeEffect.Default,
+        }),
     )
 
     describe(
@@ -280,10 +255,9 @@ describe('Command Tests', () => {
 
     describe(
         'RevealedCharacters',
-        createApplyCommandTestSuite(
-            CommandParserMap[EffectKey.RevealedCharacters],
-            { concealed: ConcealedEffect[EffectKey.RevealedCharacters] },
-        ),
+        createApplyCommandTestSuite(CommandParserMap[EffectKey.RevealedCharacters], {
+            concealed: ConcealedEffect[EffectKey.RevealedCharacters],
+        }),
     )
 
     describe(
@@ -293,35 +267,11 @@ describe('Command Tests', () => {
         }),
     )
 
-    describe(
-        'Foreground',
-        createApplyColorTestSuite(
-            CommandParserMap[EffectKey.Foreground],
-            'foreground',
-        ),
-    )
+    describe('Foreground', createApplyColorTestSuite(CommandParserMap[EffectKey.Foreground], 'foreground'))
 
-    describe(
-        'BrightForeground',
-        createApplyColorTestSuite(
-            CommandParserMap[EffectKey.BrightForeground],
-            'foreground',
-        ),
-    )
+    describe('BrightForeground', createApplyColorTestSuite(CommandParserMap[EffectKey.BrightForeground], 'foreground'))
 
-    describe(
-        'Background',
-        createApplyColorTestSuite(
-            CommandParserMap[EffectKey.Background],
-            'background',
-        ),
-    )
+    describe('Background', createApplyColorTestSuite(CommandParserMap[EffectKey.Background], 'background'))
 
-    describe(
-        'BrightBackground',
-        createApplyColorTestSuite(
-            CommandParserMap[EffectKey.BrightBackground],
-            'background',
-        ),
-    )
+    describe('BrightBackground', createApplyColorTestSuite(CommandParserMap[EffectKey.BrightBackground], 'background'))
 })

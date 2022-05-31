@@ -24,19 +24,13 @@ export type FormattingType = {
 }
 
 export class LogFormatBuilder {
-    static format<F extends LogFormat>(
-        rawLog: string,
-        formatting: F,
-    ): FormattingType[F] {
+    static format<F extends LogFormat>(rawLog: string, formatting: F): FormattingType[F] {
         const parser = new SGRCommandParser()
         const ast = parser.parse(rawLog)
         return FormatterMap[formatting].build(ast) as FormattingType[F]
     }
 
-    static formatRaw<F extends LogFormat>(
-        astHead: WriteableSGRAstNode,
-        formatting: F,
-    ): FormattingType[F] {
+    static formatRaw<F extends LogFormat>(astHead: WriteableSGRAstNode, formatting: F): FormattingType[F] {
         return FormatterMap[formatting].build(astHead) as FormattingType[F]
     }
 }

@@ -8,7 +8,7 @@ export const Optimize2: ASTTransformer = (head: WriteableSGRAstNode) => {
             node.nextNode &&
             Object.keys(node.effect).every(
                 // @ts-ignore
-                (key) => node.effect[key] === node.nextNode.effect[key],
+                key => node.effect[key] === node.nextNode.effect[key],
             )
         ) {
             const removedNode = node.removeAfter()

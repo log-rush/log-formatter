@@ -48,10 +48,7 @@ const classMap: Record<keyof typeof EffectsMap, Record<string, string>> = {
 }
 
 export class HTMLNodeBuilder implements SGROutputBuilder {
-    private getColor(
-        effect: SGREffect,
-        type: 'foreground' | 'background',
-    ): string {
+    private getColor(effect: SGREffect, type: 'foreground' | 'background'): string {
         const color = effect[type]
         if (color === ColorEffect.Default) return ''
         const colorMode = effect[`${type}Mode`]

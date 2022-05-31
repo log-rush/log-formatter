@@ -136,7 +136,7 @@ export const TOKENS: Token[] = [
         EffectKey.ColorCyan,
         EffectKey.ColorWhite,
         EffectKey.ColorDefault,
-    ].map((token) => ({ token, precedence: EffectPrecedence.Low })),
+    ].map(token => ({ token, precedence: EffectPrecedence.Low })),
     ...[
         EffectKey.ChainCommand,
         EffectKey.Bold,
@@ -156,7 +156,7 @@ export const TOKENS: Token[] = [
         EffectKey.PositiveImage,
         EffectKey.RevealedCharacters,
         EffectKey.NotCrossedOut,
-    ].map((token) => ({ token, precedence: EffectPrecedence.Medium })),
+    ].map(token => ({ token, precedence: EffectPrecedence.Medium })),
     ...[
         EffectKey.Reset,
         EffectKey.ColorMode256,
@@ -164,7 +164,7 @@ export const TOKENS: Token[] = [
         EffectKey.Background,
         EffectKey.BrightForeground,
         EffectKey.BrightBackground,
-    ].map((token) => ({ token, precedence: EffectPrecedence.High })),
+    ].map(token => ({ token, precedence: EffectPrecedence.High })),
 ].reverse()
 
 export const Color8 = [

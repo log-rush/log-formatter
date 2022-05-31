@@ -24,13 +24,8 @@ export type TextAttribute = {
     content: string
 }
 
-export class AttributeArrayBuilder
-    implements SGROutputBuilder<TextAttribute[]>
-{
-    private getColor(
-        effect: SGREffect,
-        type: 'foreground' | 'background',
-    ): string {
+export class AttributeArrayBuilder implements SGROutputBuilder<TextAttribute[]> {
+    private getColor(effect: SGREffect, type: 'foreground' | 'background'): string {
         const color = effect[type]
         if (color === ColorEffect.Default) return ''
         const colorMode = effect[`${type}Mode`]
@@ -60,24 +55,18 @@ export class AttributeArrayBuilder
     private getUnderline(effect: SGREffect): TextAttribute['underline'] {
         if (effect.weight === UnderlineEffect[EffectKey.Underline]) {
             return 'single'
-        } else if (
-            effect.weight === UnderlineEffect[EffectKey.DoublyUnderlined]
-        ) {
+        } else if (effect.weight === UnderlineEffect[EffectKey.DoublyUnderlined]) {
             return 'double'
         }
         return undefined
     }
 
     private getForeground(effect: SGREffect): TextAttribute['foreground'] {
-        return effect.foreground === DefaultSGREffects.foreground
-            ? undefined
-            : this.getColor(effect, 'foreground')
+        return effect.foreground === DefaultSGREffects.foreground ? undefined : this.getColor(effect, 'foreground')
     }
 
     private getBackground(effect: SGREffect): TextAttribute['background'] {
-        return effect.foreground === DefaultSGREffects.foreground
-            ? undefined
-            : this.getColor(effect, 'background')
+        return effect.foreground === DefaultSGREffects.foreground ? undefined : this.getColor(effect, 'background')
     }
 
     private getBlink(effect: SGREffect): TextAttribute['blink'] {
@@ -94,15 +83,11 @@ export class AttributeArrayBuilder
     }
 
     private getCrossedOut(effect: SGREffect): TextAttribute['crossedOut'] {
-        return effect.crossedOut === DefaultSGREffects.crossedOut
-            ? undefined
-            : true
+        return effect.crossedOut === DefaultSGREffects.crossedOut ? undefined : true
     }
 
     private getConcealed(effect: SGREffect): TextAttribute['concealed'] {
-        return effect.concealed === DefaultSGREffects.concealed
-            ? undefined
-            : true
+        return effect.concealed === DefaultSGREffects.concealed ? undefined : true
     }
 
     build(root: ReadOnlySGRAstNode): TextAttribute[] {
