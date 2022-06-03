@@ -4,11 +4,44 @@
 }
 
 .l-bs {
-    /* TODO: add blink animation */
+    /* should be slower than 150 times a minute */
+    animation: blink-animation 0.5s linear infinite;
+    -webkit-animation: blink-animation 0.5s linear infinite;
 }
 
 .l-br {
-    /* TODO: add blink animation */
+    /* should be faster than 150 times a minute */
+    animation: blink-animation 0.3s linear infinite;
+    -webkit-animation: blink-animation 0.3s linear infinite;
+}
+
+@keyframes blink-animation {
+    0% {
+        opacity: 0;
+    }
+    49% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@-webkit-keyframes blink-animation {
+    0% {
+        opacity: 0;
+    }
+    49% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .l-cc {
@@ -39,12 +72,34 @@
 }
 
 .l-u {
-    text-decoration: underline;
+    position: relative;
+}
+
+/* 
+using the ::before pseudo element because:
+- it does not conflict with text-decoration: line-through;
+- it does not conflict with doubly-underlined
+*/
+.l-u::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    border-bottom: 1px solid;
 }
 
 .l-du {
-    /* TODO:  do double underline */
-    text-decoration: underline;
+    position: relative;
+}
+
+.l-du::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -3px;
+    border-bottom: 3px double;
 }
 
 .l-b {
