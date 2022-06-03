@@ -87,7 +87,10 @@ export class HTMLNodeBuilder implements SGROutputBuilder {
 
             const fgColor = this.getColor(currentNode.effect, 'foreground')
             const bgColor = this.getColor(currentNode.effect, 'background')
-            node.setAttribute('style', `--fg: ${fgColor}; --bg: ${bgColor}`)
+            node.setAttribute(
+                'style',
+                `${fgColor !== '' ? `--fg: ${fgColor};` : ''} ${bgColor !== '' ? `--bg: ${bgColor};` : ''}`,
+            )
 
             wrapper.appendChild(node)
             currentNode = currentNode.nextNode
