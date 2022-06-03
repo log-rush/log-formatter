@@ -22,6 +22,6 @@ let update = await question('choose version update: ', {
     choices: ['patch', 'minor', 'major']
 })
 
-await $`echo "yarn version --${update}"`
+await $`yarn version --${update}`
 
 await $`git push --tags && git push`

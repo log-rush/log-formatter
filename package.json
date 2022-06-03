@@ -26,7 +26,8 @@
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage",
         "format": "prettier --write './src/**/*.ts'",
-        "format:ci": "prettier --check './src/**/*.ts'"
+        "format:ci": "prettier --check './src/**/*.ts'",
+        "release": "yarn zx ./scripts/release.mjs"
     },
     "devDependencies": {
         "@types/jest": "^27.5.1",
