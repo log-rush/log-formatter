@@ -8,6 +8,16 @@
     "files": [
         "dist/**"
     ],
+    "description": "Parse/Format/Style colored logs",
+    "keywords": [
+        "logs",
+        "logging",
+        "color",
+        "styled",
+        "sgr",
+        "terminal",
+        "parsing"
+    ],
     "scripts": {
         "build": "yarn zx ./scripts/build.mjs",
         "build:browser": "tsc -p ./tsconfig.browser.json",
