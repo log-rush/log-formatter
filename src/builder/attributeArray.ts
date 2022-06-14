@@ -1,3 +1,4 @@
+import { ColorMode256Colors, ColorMode8Colors } from '../colors'
 import {
     SGREffect,
     ColorEffect,
