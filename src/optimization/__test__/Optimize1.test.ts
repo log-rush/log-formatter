@@ -32,9 +32,9 @@ describe('Optimize 1 Tests', () => {
 
         Optimize1(a)
 
-        expect(a.effect.foreground).toEqual('abc')
+        expect(a.effect.foreground).not.toEqual('abc')
         expect(a.nextNode).toBeDefined()
         expect(a.nextNode?.nextNode).toBeUndefined()
-        expect(a.nextNode?.effect.foreground).not.toEqual('abc')
+        expect(a.nextNode?.effect.foreground).toEqual('abc')
     })
 })

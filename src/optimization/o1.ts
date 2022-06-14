@@ -7,8 +7,8 @@ export const Optimize1: ASTTransformer = (head: WriteableSGRAstNode) => {
     const parser = new SGRCommandParser()
     let node: WriteableSGRAstNode | undefined = head
     while (node !== undefined) {
-        if (node.nextNode && node.nextNode?.content === '') {
-            const removedNode = node.removeAfter()
+        if (node.previousNode && node.previousNode?.content === '') {
+            const removedNode = node.removeBefore()
             if (removedNode) {
                 node.setEffects(
                     parser.normalizeEffect(
